@@ -38,7 +38,7 @@ services:
       - "5044:5044"
   y2search_crawler:
     build:
-      context: .
-      dockerfile: ./docker/Dockerfile-crawler
+      context: ./y2search-crawler/
+      dockerfile: Dockerfile-crawler
     container_name: y2search_crawler
     hostname: y2search_crawler
