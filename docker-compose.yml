@@ -1,0 +1,44 @@
+version: '2'
+services:
+  y2search:
+    build: docker
+    container_name: y2search
+    hostname: y2search
+    links: 
+      - y2search_elk
+    volumes:
+      - ./y2bsearch/:/y2search
+    ports:
+      - "8123:80"
+  y2search_mysql:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-mysql
+    container_name: y2search_mysql
+    hostname: y2search_mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_ONETIME_PASSWORD=yes
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_DATABASE=y2search_db
+    ports:
+      - "3306:3306"
+  y2search_elk:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-elk
+    container_name: y2search_elk
+    hostname: y2search_elk
+    links: 
+      - y2search_mysql
+    ports:
+      - "9200:9200"
+      - "5601:5601"
+      - "5044:5044"
+  y2search_crawler:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-crawler
+    container_name: y2search_crawler
+    hostname: y2search_crawler

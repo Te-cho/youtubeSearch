@@ -1,0 +1,11 @@
+#include "ssh.docker"
+RUN apt-get install -y zip unzip git php-xdebug 2>&1 && \
+    phpenmod xdebug && \
+    echo "export PHP_IDE_CONFIG=\"serverName=web\"" >> ~/.bashrc && \
+    mkdir -p /usr/local/bin/ && \
+    curl -s -o installer.php "https://getcomposer.org/installer" && \
+    php installer.php --install-dir=/usr/local/bin --filename=composer && \
+    rm -f installer.php
+ADD docker/config/php7/xdebug.ini /etc/php/7.0/mods-available/xdebug.ini
+ADD docker/config/.bashrc /tmp/.bashrc
+RUN cat /tmp/.bashrc >> ~/.bashrc
