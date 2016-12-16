@@ -4,6 +4,8 @@ import (
   "fmt"
   "time"
   "log"
+  "math/rand"
+  "strconv"
 )
 import "os/exec"
 
@@ -17,12 +19,19 @@ func printer(c chan string) {
   for {
     msg := <- c
     fmt.Println(msg)
-    commandParams := " --write-auto-sub --skip-download \"https://www.youtube.com/watch?v=QECX7YvzF_c\" -o srts/here_" + time.Now().String() + ".srt"
-    command := "youtube-dl"
-    cmd := exec.Command(command, commandParams)
-	cmd.Run()
+	rand.Seed(time.Now().UnixNano())
 
-	log.Printf("command : %v", commandParams)
+	filename := "\"srts/here_"+strconv.Itoa(rand.Intn(1000000))+".srt\""
+    commandParams := " --write-auto-sub --skip-download \"https://www.youtube.com/watch?v=QECX7YvzF_c\" -o " + filename
+    commandName := "youtube-dl"
+    command := commandName + " " + commandParams
+    cmd := exec.Command("sh","-c", command)
+	err := cmd.Run()
+	if err != nil {
+		log.Printf("%v",err)
+	}
+
+	log.Printf("command : %v", command)
 	
     time.Sleep(time.Second * 1)
   }
@@ -39,19 +48,11 @@ func main() {
 
   go pinger(c)
   go ponger(c)
-
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
-  go printer(c)
+  
+  for i := 0; i<100; i++ {
+    go printer(c)
+  }
+  
 
   var input string
   fmt.Scanln(&input)
