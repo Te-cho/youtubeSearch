@@ -6,7 +6,7 @@ import (
 	"log"
 	"flag"
 	"math/rand"
-	"strconv"
+	// "strconv"
 	"net/http"
 	"google.golang.org/api/googleapi/transport"
 	"google.golang.org/api/youtube/v3"
@@ -60,22 +60,14 @@ func listTrending(c chan *youtube.Video) {
 
 //END OF YOUTUBE
 
-//channels
+// SRT Downloader
+func downloadVideo(id string) {
 
-func pinger(c chan string) {
-  for i := 0; ; i++ {
-    c <- "ping"
-  }
-}
-
-func printer(c chan string) {
-  for {
-    msg := <- c
-    fmt.Println(msg)
 	rand.Seed(time.Now().UnixNano())
 
-	filename := "\"srts/here_"+strconv.Itoa(rand.Intn(1000000))+".srt\""
-    commandParams := " --write-auto-sub --skip-download \"https://www.youtube.com/watch?v=QECX7YvzF_c\" -o " + filename
+	// filename := "\"srts/here_"+strconv.Itoa(rand.Intn(1000000))+".srt\""
+	filename := "\"srts/here_" + id + ".srt\""
+    commandParams := " --write-auto-sub --skip-download \"https://www.youtube.com/watch?v=" + id + "\" -o " + filename
     commandName := "youtube-dl"
     command := commandName + " " + commandParams
     cmd := exec.Command("sh","-c", command)
@@ -85,42 +77,24 @@ func printer(c chan string) {
 	}
 
 	log.Printf("command : %v", command)
-	
-    time.Sleep(time.Second * 1)
-  }
 }
 
-func ponger(c chan string) {
-  for i := 0; ; i++ {
-    c <- "pong"
-  }
-}
-
-
-//printers
+//Printers
 func videoPrinter(c chan *youtube.Video) {
   for {
     msg := <- c
-    fmt.Println(msg.Snippet.Title)
+    fmt.Println(msg.Id)
+    downloadVideo(msg.Id)
   }
 }
 
 func main() {
 	var c chan *youtube.Video = make(chan *youtube.Video)
 	go listTrending(c)
-
-	go videoPrinter(c)
-	go videoPrinter(c)
-	go videoPrinter(c)
-
-  // var c chan string = make(chan string)
-
-  // go pinger(c)
-  // go ponger(c)
-  
-  // for i := 0; i<100; i++ {
-  //   go printer(c)
-  // }
+	
+	for i := 0; i<50; i++ {
+		go videoPrinter(c)
+	}
   
 
   var input string
