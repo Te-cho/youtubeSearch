@@ -1,4 +1,4 @@
-package main
+package youtubelib
 
 import (
         "flag"
@@ -17,6 +17,16 @@ var (
 )
 
 const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
+
+type YouTubeLib struct {
+    Name string
+}
+
+func New(name string) (youtubelib * YouTubeLib) {
+    return &YouTubeLib{
+        Name: name,
+    }
+}
 
 func search() {
         flag.Parse()
@@ -85,19 +95,19 @@ func listTrending() {
 
         // Group video, channel, and playlist results in separate lists.
         //can use type youtube.Video later
-        videos := make(map[string]string)
+        videos := make(map[string]*youtube.Video)
 
         // Iterate through each item and add it to the correct list.
         for _, item := range response.Items {
-                videos[item.Id] = item.Snippet.Title
+                videos[item.Id] = item
         }
-
-        printIDs("Videos", videos)
+        
+        // printIDs("Videos", videos)
 }
 
-func main () {
-	listTrending()
-}
+// func main () {
+// 	listTrending()
+// }
 // Print the ID and title of each result in a list as well as a name that
 // identifies the list. For example, print the word section name "Videos"
 // above a list of video search results, followed by the video ID and title
