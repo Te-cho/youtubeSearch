@@ -4,3 +4,4 @@ RUN curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/yout
 RUN chmod a+rx /usr/local/bin/youtube-dl
 RUN go get -u google.golang.org/api/googleapi/transport
 RUN go get -u google.golang.org/api/youtube/v3
+RUN go get github.com/go-sql-driver/mysql

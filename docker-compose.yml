@@ -41,6 +41,8 @@ services:
       context: ./y2search-crawler/
       dockerfile: Dockerfile-crawler
     container_name: y2search_crawler
+    links: 
+      - y2search_mysql
     volumes: 
       - ./y2search-crawler/src:/go/src/app
     hostname: y2search_crawler
