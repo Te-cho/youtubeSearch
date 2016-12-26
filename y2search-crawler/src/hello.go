@@ -14,6 +14,8 @@ import (
 import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "os/exec"
+import "io/ioutil"
+
 
 //START OF YOUTUBE
 var (
@@ -83,7 +85,7 @@ func downloadVideo(id string) {
 }
 
 //Printers
-func videoPrinter(c chan *youtube.Video) {
+func videosHandler(c chan *youtube.Video) {
   for {
     msg := <- c
     fmt.Println(msg.Id)
@@ -106,8 +108,30 @@ func mysqlConnection() {
 	if err != nil {
 	    panic(err.Error()) // proper error handling instead of panic in your app
 	}
-
 	
+	// read file
+
+	file, err := ioutil.ReadFile("srts/" + "here_dvk2PQNcg8w.en.vtt")
+	// fmt.Println(file)
+
+
+
+	// Execute the query
+    // db.Query("INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, `id_123123`,`url`,`title`)")
+    // Prepare statement for inserting data
+    stmtIns, err := db.Prepare("INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, ?, ?, ?)") // ? = placeholder
+    if err != nil {
+        panic(err.Error()) // proper error handling instead of panic in your app
+    }
+    defer stmtIns.Close() // Close the statement when we leave main() / the program terminates
+
+    
+    _, err = stmtIns.Exec(`id_123123`,file,`title`) // Insert tuples (i, i^2)
+    if err != nil {
+        panic(err.Error()) // proper error handling instead of panic in your app
+    }
+
+
     // Execute the query
     rows, err := db.Query("SELECT * FROM videos")
     if err != nil {
@@ -165,7 +189,7 @@ func main() {
 	// go listTrending(c)
 	
 	// for i := 0; i<50; i++ {
-	// 	go videoPrinter(c)
+	// 	go videosHandler(c)
 	// }
 
 	//mysql connection test
