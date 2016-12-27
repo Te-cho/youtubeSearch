@@ -15,6 +15,8 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "os/exec"
 import "io/ioutil"
+// import "reflect"
+
 
 
 //START OF YOUTUBE
@@ -22,10 +24,20 @@ var (
         query      = flag.String("query", "iprice Mannequinchallenge", "")
         listingVideos = flag.String("chart", "mostPopular", "")
         maxResults = flag.Int64("max-results", 50, "Max YouTube results")
+        db sql.DB
 )
+// var db sql.DB
 
 const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
 
+// Miscilanios 
+func handleError(err error){
+    if err != nil {
+        panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
+    }
+}
+
+//
 
 func listTrending(c chan *youtube.Video) {
         flag.Parse()
@@ -93,98 +105,54 @@ func videosHandler(c chan *youtube.Video) {
   }
 }
 
+func initializeMysqlConn(){
+    dbConn, err := sql.Open("mysql", "admin:admin@tcp(y2search_mysql:3306)/y2search_db")
+    db = *dbConn
+    if err != nil {
+        panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
+    }   
+
+    // Open doesn't open a connection. Validate DSN data:
+    err = db.Ping()
+    if err != nil {
+        panic(err.Error()) // proper error handling instead of panic in your app
+    }
+}
+
+func tearDownMysqlConn(){
+    db.Close()
+}
 // START OF MYSQL
-func mysqlConnection() {
-	
-	//this command works just fine
-  	db, err := sql.Open("mysql", "admin:admin@tcp(y2search_mysql:3306)/y2search_db")
-	if err != nil {
-	    panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
-	}
-	defer db.Close()
+func StoreValue(videoId string) {
+	// Prepare statement for inserting data
+    // INSERTING VIDEO
+    // Prepairing 
+    stmtVidIns, err := db.Prepare("INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, ?, ?, ?)") // ? = placeholder
+    handleError(err)
+    defer stmtVidIns.Close() // Close the statement when we leave main() / the program terminates
+    // Inserting
+    result, err := stmtVidIns.Exec(videoId, `url`, `title`) // Insert tuples (i, i^2)
+    handleError(err)
+    lastInsertedId, _ := result.LastInsertId()
+    fmt.Println(lastInsertedId)
 
-	// Open doesn't open a connection. Validate DSN data:
-	err = db.Ping()
-	if err != nil {
-	    panic(err.Error()) // proper error handling instead of panic in your app
-	}
-	
-	// read file
-
-	file, err := ioutil.ReadFile("srts/" + "here_dvk2PQNcg8w.en.vtt")
-	// fmt.Println(file)
-
-
-
-	// Execute the query
-    // db.Query("INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, `id_123123`,`url`,`title`)")
-    // Prepare statement for inserting data
-    stmtIns, err := db.Prepare("INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, ?, ?, ?)") // ? = placeholder
-    if err != nil {
-        panic(err.Error()) // proper error handling instead of panic in your app
-    }
-    defer stmtIns.Close() // Close the statement when we leave main() / the program terminates
-
-    
-    _, err = stmtIns.Exec(`id_123123`,file,`title`) // Insert tuples (i, i^2)
-    if err != nil {
-        panic(err.Error()) // proper error handling instead of panic in your app
-    }
-
-
-    // Execute the query
-    rows, err := db.Query("SELECT * FROM videos")
-    if err != nil {
-        panic(err.Error()) // proper error handling instead of panic in your app
-    }
-
-    // Get column names
-    columns, err := rows.Columns()
-    if err != nil {
-        panic(err.Error()) // proper error handling instead of panic in your app
-    }
-
-    // Make a slice for the values
-    values := make([]sql.RawBytes, len(columns))
-
-    // rows.Scan wants '[]interface{}' as an argument, so we must copy the
-    // references into such a slice
-    // See http://code.google.com/p/go-wiki/wiki/InterfaceSlice for details
-    scanArgs := make([]interface{}, len(values))
-    for i := range values {
-        scanArgs[i] = &values[i]
-    }
-
-    // Fetch rows
-    for rows.Next() {
-        // get RawBytes from data
-        err = rows.Scan(scanArgs...)
-        if err != nil {
-            panic(err.Error()) // proper error handling instead of panic in your app
-        }
-
-        // Now do something with the data.
-        // Here we just print each column as a string.
-        var value string
-        for i, col := range values {
-            // Here we can check if the value is nil (NULL value)
-            if col == nil {
-                value = "NULL"
-            } else {
-                value = string(col)
-            }
-            fmt.Println(columns[i], ": ", value)
-        }
-        fmt.Println("-----------------------------------")
-    }
-    if err = rows.Err(); err != nil {
-        panic(err.Error()) // proper error handling instead of panic in your app
-    }
+    // Read subtitles file
+    file, err := ioutil.ReadFile("srts/here_" + videoId + ".en.vtt")
+    handleError(err)
+    // INSERTING VIDEO's Subtitles
+    // Prepairing 
+    stmtVidSubIns, err := db.Prepare("INSERT INTO videos_subtitles (`id`, `video_id`,`subtitles`,`language`) VALUES (NULL, ?, ?, ?)") // ? = placeholder
+    handleError(err)
+    defer stmtVidSubIns.Close() // Close the statement when we leave main() / the program terminates
+    // Inserting
+    _, err = stmtVidSubIns.Exec(lastInsertedId,file,`en`) // Insert tuples
+    handleError(err)
 
 }
 // END OF MYSQL
 
 func main() {
+    
 	// var c chan *youtube.Video = make(chan *youtube.Video)
 	// go listTrending(c)
 	
@@ -192,9 +160,12 @@ func main() {
 	// 	go videosHandler(c)
 	// }
 
-	//mysql connection test
-	mysqlConnection();
+	//mysql connection
+    initializeMysqlConn()
+    //test store value
+	StoreValue("dvk2PQNcg8w")
 
   var input string
   fmt.Scanln(&input)
+  defer tearDownMysqlConn()
 }
