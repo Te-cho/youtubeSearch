@@ -88,8 +88,8 @@ func downloadVideo(id string) {
     commandName := "youtube-dl"
     command := commandName + " " + commandParams
     cmd := exec.Command("sh","-c", command)
-	err := cmd.Run()
-	if err != nil {
+	err := cmd.Run() // waits until the commands runs and finishes
+    if err != nil {
 		log.Printf("%v",err)
 	}
 
@@ -102,9 +102,14 @@ func videosHandler(c chan *youtube.Video) {
     msg := <- c
     fmt.Println(msg.Id)
     downloadVideo(msg.Id)
+    StoreValue(msg.Id)
   }
 }
 
+// START OF MYSQL
+//////////////////
+
+// initialize Mysql Connection
 func initializeMysqlConn(){
     dbConn, err := sql.Open("mysql", "admin:admin@tcp(y2search_mysql:3306)/y2search_db")
     db = *dbConn
@@ -119,10 +124,12 @@ func initializeMysqlConn(){
     }
 }
 
+// destruct Mysql Connection
 func tearDownMysqlConn(){
     db.Close()
 }
-// START OF MYSQL
+
+// store values in mysql connection
 func StoreValue(videoId string) {
 	// Prepare statement for inserting data
     // INSERTING VIDEO
@@ -138,32 +145,34 @@ func StoreValue(videoId string) {
 
     // Read subtitles file
     file, err := ioutil.ReadFile("srts/here_" + videoId + ".en.vtt")
-    handleError(err)
-    // INSERTING VIDEO's Subtitles
-    // Prepairing 
-    stmtVidSubIns, err := db.Prepare("INSERT INTO videos_subtitles (`id`, `video_id`,`subtitles`,`language`) VALUES (NULL, ?, ?, ?)") // ? = placeholder
-    handleError(err)
-    defer stmtVidSubIns.Close() // Close the statement when we leave main() / the program terminates
-    // Inserting
-    _, err = stmtVidSubIns.Exec(lastInsertedId,file,`en`) // Insert tuples
-    handleError(err)
+    if err == nil {
+        // INSERTING VIDEO's Subtitles
+        // Prepairing 
+        stmtVidSubIns, err := db.Prepare("INSERT INTO videos_subtitles (`id`, `video_id`,`subtitles`,`language`) VALUES (NULL, ?, ?, ?)") // ? = placeholder
+        handleError(err)
+        defer stmtVidSubIns.Close() // Close the statement when we leave main() / the program terminates
+        // Inserting
+        _, err = stmtVidSubIns.Exec(lastInsertedId,file,`en`) // Insert tuples
+        handleError(err)
+    }
 
 }
+
+//////////////////
 // END OF MYSQL
 
 func main() {
-    
-	// var c chan *youtube.Video = make(chan *youtube.Video)
-	// go listTrending(c)
-	
-	// for i := 0; i<50; i++ {
-	// 	go videosHandler(c)
-	// }
-
-	//mysql connection
+    //mysql connection
     initializeMysqlConn()
+	var c chan *youtube.Video = make(chan *youtube.Video)
+	go listTrending(c)
+	
+	for i := 0; i<50; i++ {
+		go videosHandler(c)
+	}
+
     //test store value
-	StoreValue("dvk2PQNcg8w")
+	// StoreValue("dvk2PQNcg8w")
 
   var input string
   fmt.Scanln(&input)
