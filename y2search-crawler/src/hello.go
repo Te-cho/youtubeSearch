@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"time"
+	// "time"
 	"log"
 	"flag"
-	"math/rand"
+	// "math/rand"
 	// "strconv"
 	"net/http"
 	"google.golang.org/api/googleapi/transport"
@@ -80,10 +80,7 @@ func listTrending(c chan *youtube.Video) {
 // SRT Downloader
 func downloadVideo(id string) {
 
-	rand.Seed(time.Now().UnixNano())
-
-	// filename := "\"srts/here_"+strconv.Itoa(rand.Intn(1000000))+".srt\""
-	filename := "\"srts/here_" + id + ".srt\""
+	filename := "\"srts/" + id + ".srt\""
     commandParams := " --write-auto-sub --skip-download \"https://www.youtube.com/watch?v=" + id + "\" -o " + filename
     commandName := "youtube-dl"
     command := commandName + " " + commandParams
@@ -98,12 +95,12 @@ func downloadVideo(id string) {
 
 //Printers
 func videosHandler(c chan *youtube.Video) {
-  for {
+  // for {
     msg := <- c
     fmt.Println(msg.Id)
     downloadVideo(msg.Id)
     StoreValue(msg.Id)
-  }
+  // }
 }
 
 // START OF MYSQL
@@ -144,7 +141,7 @@ func StoreValue(videoId string) {
     fmt.Println(lastInsertedId)
 
     // Read subtitles file
-    file, err := ioutil.ReadFile("srts/here_" + videoId + ".en.vtt")
+    file, err := ioutil.ReadFile("srts/" + videoId + ".en.vtt")
     if err == nil {
         // INSERTING VIDEO's Subtitles
         // Prepairing 
@@ -170,9 +167,6 @@ func main() {
 	for i := 0; i<50; i++ {
 		go videosHandler(c)
 	}
-
-    //test store value
-	// StoreValue("dvk2PQNcg8w")
 
   var input string
   fmt.Scanln(&input)
