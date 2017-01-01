@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	// "time"
 	"log"
 	"flag"
-	// "math/rand"
-	// "strconv"
 	"net/http"
 	"google.golang.org/api/googleapi/transport"
 	"google.golang.org/api/youtube/v3"
@@ -15,11 +12,8 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "os/exec"
 import "io/ioutil"
-// import "reflect"
 
 
-
-//START OF YOUTUBE
 var (
         query      = flag.String("query", "iprice Mannequinchallenge", "")
         listingVideos = flag.String("chart", "mostPopular", "")
@@ -27,18 +21,20 @@ var (
         db sql.DB
 )
 // var db sql.DB
-
 const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
 
-// Miscilanios 
+//////////////////
+//START OF Miscilanious 
 func handleError(err error){
     if err != nil {
         panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
     }
 }
+//END OF Miscilanious 
+//////////////////
 
-//
-
+//////////////////
+//START OF YOUTUBE
 func listTrending(c chan *youtube.Video) {
         flag.Parse()
 
@@ -74,12 +70,11 @@ func listTrending(c chan *youtube.Video) {
         
         // printIDs("Videos", videos)
 }
-
 //END OF YOUTUBE
+//////////////////
 
 // SRT Downloader
 func downloadVideo(id string) {
-
 	filename := "\"srts/" + id + ".srt\""
     commandParams := " --write-auto-sub --skip-download \"https://www.youtube.com/watch?v=" + id + "\" -o " + filename
     commandName := "youtube-dl"
@@ -89,24 +84,23 @@ func downloadVideo(id string) {
     if err != nil {
 		log.Printf("%v",err)
 	}
-
 	log.Printf("command : %v", command)
 }
 
 //Printers
-func videosHandler(c chan *youtube.Video) {
+func videosHandler(videoChan chan *youtube.Video) {
   // for {
-    msg := <- c
-    fmt.Println(msg.Id)
-    downloadVideo(msg.Id)
-    StoreValue(msg.Id)
+    video := <- videoChan
+    fmt.Println(video.Id)
+    downloadVideo(video.Id)
+    StoreValue(video.Id)
   // }
 }
 
 // START OF MYSQL
 //////////////////
 
-// initialize Mysql Connection
+// Initialize Mysql Connection
 func initializeMysqlConn(){
     dbConn, err := sql.Open("mysql", "admin:admin@tcp(y2search_mysql:3306)/y2search_db")
     db = *dbConn
@@ -131,17 +125,18 @@ func StoreValue(videoId string) {
 	// Prepare statement for inserting data
     // INSERTING VIDEO
     // Prepairing 
-    stmtVidIns, err := db.Prepare("INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, ?, ?, ?)") // ? = placeholder
+    videoInsertQuery := "INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, ?, ?, ?)"
+    stmtVidIns, err := db.Prepare(videoInsertQuery) // ? = placeholder
     handleError(err)
     defer stmtVidIns.Close() // Close the statement when we leave main() / the program terminates
-    // Inserting
-    result, err := stmtVidIns.Exec(videoId, `url`, `title`) // Insert tuples (i, i^2)
+    result, err := stmtVidIns.Exec(videoId, `url`, `title`)// Inserting    
     handleError(err)
     lastInsertedId, _ := result.LastInsertId()
     fmt.Println(lastInsertedId)
 
     // Read subtitles file
-    file, err := ioutil.ReadFile("srts/" + videoId + ".en.vtt")
+    file, err := ioutil.ReadFile("srts/" + videoId + ".vtt")
+    fmt.Println(err)
     if err == nil {
         // INSERTING VIDEO's Subtitles
         // Prepairing 
@@ -158,6 +153,11 @@ func StoreValue(videoId string) {
 //////////////////
 // END OF MYSQL
 
+
+////////////////////////////////////
+////////////////////////////////////
+// MAIN APPLICATION START POINT
+
 func main() {
     //mysql connection
     initializeMysqlConn()
@@ -172,3 +172,6 @@ func main() {
   fmt.Scanln(&input)
   defer tearDownMysqlConn()
 }
+// MAIN APPLICATION END POINT
+////////////////////////////////////
+////////////////////////////////////
