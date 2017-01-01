@@ -70,6 +70,10 @@ func listTrending(c chan *youtube.Video) {
         
         // printIDs("Videos", videos)
 }
+//Bring suggestions for the videos Id passed
+func getVideoSuggestions(videoId string) {//([]*youtube.Video){
+
+}
 //END OF YOUTUBE
 //////////////////
 
@@ -89,12 +93,11 @@ func downloadVideo(id string) {
 
 //Printers
 func videosHandler(videoChan chan *youtube.Video) {
-  // for {
     video := <- videoChan
     fmt.Println(video.Id)
     downloadVideo(video.Id)
     StoreValue(video.Id)
-  // }
+    getVideoSuggestions(video.Id)
 }
 
 // START OF MYSQL
@@ -135,7 +138,7 @@ func StoreValue(videoId string) {
     fmt.Println(lastInsertedId)
 
     // Read subtitles file
-    file, err := ioutil.ReadFile("srts/" + videoId + ".vtt")
+    file, err := ioutil.ReadFile("srts/" + videoId + ".en.vtt")// it will be save with this extension regardless
     fmt.Println(err)
     if err == nil {
         // INSERTING VIDEO's Subtitles
@@ -147,7 +150,6 @@ func StoreValue(videoId string) {
         _, err = stmtVidSubIns.Exec(lastInsertedId,file,`en`) // Insert tuples
         handleError(err)
     }
-
 }
 
 //////////////////
