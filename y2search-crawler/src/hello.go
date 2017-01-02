@@ -19,6 +19,7 @@ var (
         listingVideos = flag.String("chart", "mostPopular", "")
         maxResults = flag.Int64("max-results", 50, "Max YouTube results")
         db sql.DB
+        debugOutput = false
 )
 // var db sql.DB
 const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
@@ -156,16 +157,17 @@ func downloadVideo(id string) {
     if err != nil {
 		log.Printf("%v",err)
 	}
-	log.Printf("command : %v", command)
+	if debugOutput {log.Printf("command : %v", command)}
+    fmt.Println('.');
 }
 
 //Printers
 func videosHandler(videoChan chan YTVideo) {
     video := <- videoChan
-    fmt.Println(video.id)
+    if debugOutput {fmt.Println(video.id)}
     downloadVideo(video.id)
     StoreValue(video)
-    go getVideoSuggestions(video.id, videoChan, "12")
+    go getVideoSuggestions(video.id, videoChan, "12")// 12 is a random token that works as initial value
 }
 
 // START OF MYSQL
@@ -206,7 +208,7 @@ func StoreValue(ytVideo YTVideo) {
 
     // Read subtitles file
     file, err := ioutil.ReadFile("srts/" + ytVideo.id + ".en.vtt")// it will be save with this extension regardless
-    fmt.Println(err)
+    if debugOutput {fmt.Println(err)}
     if err == nil {
         // INSERTING VIDEO's Subtitles
         // Prepairing 
@@ -233,7 +235,7 @@ func main() {
 	var c chan YTVideo = make(chan YTVideo)
 	go listTrending(c)
 	
-	for i := 0; i<1; i++ {
+	for i := 0; i<50; i++ {
 		go videosHandler(c)
 	}
 
