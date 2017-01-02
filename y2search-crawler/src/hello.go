@@ -67,12 +67,50 @@ func listTrending(c chan *youtube.Video) {
                 videos[item.Id] = item
                 c <- item
         }
-        
-        // printIDs("Videos", videos)
 }
 //Bring suggestions for the videos Id passed
-func getVideoSuggestions(videoId string) {//([]*youtube.Video){
+func getVideoSuggestions(videoId string, videoChan chan *youtube.Video, pageToken string) {//([]*youtube.Video){
+        flag.Parse()
 
+        client := &http.Client{
+                Transport: &transport.APIKey{Key: developerKey},
+        }
+
+        service, err := youtube.New(client)
+        if err != nil {
+                log.Fatalf("Error creating new YouTube client: %v", err)
+        }
+
+        // Make the API call to YouTube.
+        call := service.Search.List("id,snippet").
+                MaxResults(*maxResults).
+                Type("video").
+                RelatedToVideoId(videoId).
+                PageToken(pageToken)
+
+        response, err := call.Do()
+        if err != nil {
+                log.Fatalf("Error making search API call: %v", err)
+        }
+        // fmt.Println("items %v", len(response.Items))
+        
+        // Group video, channel, and playlist results in separate lists.
+        //can use type youtube.Video later
+        // videos := make(map[string]*youtube.Video)
+
+
+        // // Iterate through each item and add it to the correct list.
+        // for _, item := range response.Items {
+        //         fmt.Printf(".")
+        //         videos[item.Id.VideoId] = item
+        //         go videosHandler(videoChan)
+        //         videoChan <- item
+        // }
+
+        //fetch the rest of th videos if we still have
+        if len(response.NextPageToken) > 0 {
+            getVideoSuggestions(videoId, videoChan, response.NextPageToken)
+        }
 }
 //END OF YOUTUBE
 //////////////////
@@ -94,10 +132,10 @@ func downloadVideo(id string) {
 //Printers
 func videosHandler(videoChan chan *youtube.Video) {
     video := <- videoChan
-    fmt.Println(video.Id)
-    downloadVideo(video.Id)
-    StoreValue(video.Id)
-    getVideoSuggestions(video.Id)
+    // fmt.Println(video.Id)
+    // downloadVideo(video.Id)
+    // StoreValue(video.Id)
+    getVideoSuggestions(video.Id, videoChan, "12")
 }
 
 // START OF MYSQL
@@ -166,7 +204,7 @@ func main() {
 	var c chan *youtube.Video = make(chan *youtube.Video)
 	go listTrending(c)
 	
-	for i := 0; i<50; i++ {
+	for i := 0; i<1; i++ {
 		go videosHandler(c)
 	}
 
