@@ -35,7 +35,40 @@ func handleError(err error){
 
 //////////////////
 //START OF YOUTUBE
-func listTrending(c chan *youtube.Video) {
+
+type YTVideo struct {
+    id string
+    title  string
+    description string
+    thumbnailDefault string
+    thumbnailMedium string
+    thumbnailHigh string
+    publishedAt string
+    duration string
+}
+func (video YTVideo) convertSearchResult(searchResult *youtube.SearchResult) YTVideo {
+    video.id = searchResult.Id.VideoId
+    video.title  = searchResult.Snippet.Title
+    video.description = searchResult.Snippet.Description
+    // video.thumbnailDefault = searchResult.Snippet.Thumbnails.default.url
+    // video.thumbnailMedium = searchResult.Snippet.Thumbnails.medium.url
+    // video.thumbnailHigh = searchResult.Snippet.Thumbnails.high.url
+    video.publishedAt = searchResult.Snippet.PublishedAt
+    return video
+}
+func (video YTVideo) convertVideoResult(videoResult *youtube.Video) YTVideo {
+    video.id = videoResult.Id
+    video.title  = videoResult.Snippet.Title
+    video.description = videoResult.Snippet.Description
+    // video.thumbnailDefault = videoResult.Snippet.Thumbnails.default.url
+    // video.thumbnailMedium = videoResult.Snippet.Thumbnails.medium.url
+    // video.thumbnailHigh = videoResult.Snippet.Thumbnails.high.url
+    video.publishedAt = videoResult.Snippet.PublishedAt
+    video.duration = videoResult.ContentDetails.Duration
+    return video
+}
+
+func listTrending(c chan YTVideo) {
         flag.Parse()
 
         client := &http.Client{
@@ -57,19 +90,15 @@ func listTrending(c chan *youtube.Video) {
                 log.Fatalf("Error making search API call: %v", err)
         }
 
-        // Group video, channel, and playlist results in separate lists.
-        //can use type youtube.Video later
-        videos := make(map[string]*youtube.Video)
-
         // Iterate through each item and add it to the correct list.
         for _, item := range response.Items {
-        		fmt.Printf(".")
-                videos[item.Id] = item
-                c <- item
+        		// fmt.Printf(".")
+                videoObj := YTVideo{}.convertVideoResult(item)
+                c <- videoObj
         }
 }
 //Bring suggestions for the videos Id passed
-func getVideoSuggestions(videoId string, videoChan chan *youtube.Video, pageToken string) {//([]*youtube.Video){
+func getVideoSuggestions(videoId string, videoChan chan YTVideo, pageToken string) {//([]*youtube.Video){
         flag.Parse()
 
         client := &http.Client{
@@ -92,20 +121,21 @@ func getVideoSuggestions(videoId string, videoChan chan *youtube.Video, pageToke
         if err != nil {
                 log.Fatalf("Error making search API call: %v", err)
         }
-        // fmt.Println("items %v", len(response.Items))
         
         // Group video, channel, and playlist results in separate lists.
         //can use type youtube.Video later
-        // videos := make(map[string]*youtube.Video)
+        videos := make(map[string]YTVideo)
 
 
         // // Iterate through each item and add it to the correct list.
-        // for _, item := range response.Items {
-        //         fmt.Printf(".")
-        //         videos[item.Id.VideoId] = item
-        //         go videosHandler(videoChan)
-        //         videoChan <- item
-        // }
+        for _, item := range response.Items {
+                // fmt.Printf(".")
+                videoObj := YTVideo{}.convertSearchResult(item)
+                videos[item.Id.VideoId] = videoObj
+                go videosHandler(videoChan)
+                videoChan <- videoObj
+        }
+
 
         //fetch the rest of th videos if we still have
         if len(response.NextPageToken) > 0 {
@@ -130,12 +160,12 @@ func downloadVideo(id string) {
 }
 
 //Printers
-func videosHandler(videoChan chan *youtube.Video) {
+func videosHandler(videoChan chan YTVideo) {
     video := <- videoChan
-    // fmt.Println(video.Id)
-    // downloadVideo(video.Id)
-    // StoreValue(video.Id)
-    getVideoSuggestions(video.Id, videoChan, "12")
+    fmt.Println(video.id)
+    downloadVideo(video.id)
+    StoreValue(video)
+    go getVideoSuggestions(video.id, videoChan, "12")
 }
 
 // START OF MYSQL
@@ -162,7 +192,7 @@ func tearDownMysqlConn(){
 }
 
 // store values in mysql connection
-func StoreValue(videoId string) {
+func StoreValue(ytVideo YTVideo) {
 	// Prepare statement for inserting data
     // INSERTING VIDEO
     // Prepairing 
@@ -170,13 +200,12 @@ func StoreValue(videoId string) {
     stmtVidIns, err := db.Prepare(videoInsertQuery) // ? = placeholder
     handleError(err)
     defer stmtVidIns.Close() // Close the statement when we leave main() / the program terminates
-    result, err := stmtVidIns.Exec(videoId, `url`, `title`)// Inserting    
+    result, err := stmtVidIns.Exec(ytVideo.id, `url`, ytVideo.title)// Inserting    
     handleError(err)
     lastInsertedId, _ := result.LastInsertId()
-    fmt.Println(lastInsertedId)
 
     // Read subtitles file
-    file, err := ioutil.ReadFile("srts/" + videoId + ".en.vtt")// it will be save with this extension regardless
+    file, err := ioutil.ReadFile("srts/" + ytVideo.id + ".en.vtt")// it will be save with this extension regardless
     fmt.Println(err)
     if err == nil {
         // INSERTING VIDEO's Subtitles
@@ -201,7 +230,7 @@ func StoreValue(videoId string) {
 func main() {
     //mysql connection
     initializeMysqlConn()
-	var c chan *youtube.Video = make(chan *youtube.Video)
+	var c chan YTVideo = make(chan YTVideo)
 	go listTrending(c)
 	
 	for i := 0; i<1; i++ {
