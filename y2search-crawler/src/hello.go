@@ -20,6 +20,7 @@ var (
         maxResults = flag.Int64("max-results", 50, "Max YouTube results")
         db sql.DB
         debugOutput = false
+        number = 0
 )
 // var db sql.DB
 const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
@@ -69,7 +70,7 @@ func (video YTVideo) convertVideoResult(videoResult *youtube.Video) YTVideo {
     return video
 }
 
-func listTrending(c chan YTVideo) {
+func listTrending(c chan YTVideo, tPoolNum chan int) {
         flag.Parse()
 
         client := &http.Client{
@@ -99,7 +100,7 @@ func listTrending(c chan YTVideo) {
         }
 }
 //Bring suggestions for the videos Id passed
-func getVideoSuggestions(videoId string, videoChan chan YTVideo, pageToken string) {//([]*youtube.Video){
+func getVideoSuggestions(videoId string, videoChan chan YTVideo, pageToken string, tPoolNum chan int) {//([]*youtube.Video){
         flag.Parse()
 
         client := &http.Client{
@@ -130,17 +131,16 @@ func getVideoSuggestions(videoId string, videoChan chan YTVideo, pageToken strin
 
         // // Iterate through each item and add it to the correct list.
         for _, item := range response.Items {
-                // fmt.Printf(".")
                 videoObj := YTVideo{}.convertSearchResult(item)
                 videos[item.Id.VideoId] = videoObj
-                go videosHandler(videoChan)
+                go videosHandler(videoChan, tPoolNum)
                 videoChan <- videoObj
         }
 
 
         //fetch the rest of th videos if we still have
         if len(response.NextPageToken) > 0 {
-            getVideoSuggestions(videoId, videoChan, response.NextPageToken)
+            getVideoSuggestions(videoId, videoChan, response.NextPageToken, tPoolNum)
         }
 }
 //END OF YOUTUBE
@@ -158,16 +158,18 @@ func downloadVideo(id string) {
 		log.Printf("%v",err)
 	}
 	if debugOutput {log.Printf("command : %v", command)}
-    fmt.Println('.');
+    fmt.Println(".");
 }
 
 //Printers
-func videosHandler(videoChan chan YTVideo) {
+func videosHandler(videoChan chan YTVideo, tPoolNum chan int) {
     video := <- videoChan
+    <- tPoolNum // get a turn in the pool
+    defer consumeThread(tPoolNum) // to give turn to other threads
     if debugOutput {fmt.Println(video.id)}
     downloadVideo(video.id)
     StoreValue(video)
-    go getVideoSuggestions(video.id, videoChan, "12")// 12 is a random token that works as initial value
+    getVideoSuggestions(video.id, videoChan, "12", tPoolNum)// 12 is a random token that works as initial value
 }
 
 // START OF MYSQL
@@ -224,6 +226,17 @@ func StoreValue(ytVideo YTVideo) {
 //////////////////
 // END OF MYSQL
 
+func threadsPoolManager(tPoolNum chan int) {
+    // So that we run only 10 at a time
+    for counter := 0; counter<10;counter++ {
+        tPoolNum <- counter
+    }
+}
+
+// After each thread consume it self, it will call this so it can give one call to another thread.
+func consumeThread(tPoolNum chan int){
+    tPoolNum <- 1 
+}
 
 ////////////////////////////////////
 ////////////////////////////////////
@@ -233,10 +246,12 @@ func main() {
     //mysql connection
     initializeMysqlConn()
 	var c chan YTVideo = make(chan YTVideo)
-	go listTrending(c)
+    var tPoolNum chan int = make(chan int)
+	go listTrending(c,tPoolNum)
+    go threadsPoolManager(tPoolNum)
 	
 	for i := 0; i<50; i++ {
-		go videosHandler(c)
+		go videosHandler(c, tPoolNum)
 	}
 
   var input string
