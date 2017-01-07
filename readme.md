@@ -1,6 +1,14 @@
 
 
-# SERVICES CONTROL:
+# SERVICES CONTROL (using MakeFile):
+- To Run all services :
+	- run all the containers that handle the services 
+	(Crawling[golang], Logstash[elk], DB[MySQL], FE[Laravel])
+	using :
+	` make up `
+- To Stop / Delete the containers 
+	` make stop `
+	` make delete `
 - To crawl the latest videos :
  - this will crawl the latest videos subtitles and meta data from videos from youtube
 	`make crawlVideos`
@@ -8,6 +16,8 @@
 - To index the data in your elastic search from myesql
 	- to be able to do proper search for users accessing your platform you need to fill your Elasticsearch documents using LogStash
 	`make indexMysql`
+	- To check the results of the indexing you can run this in your [sense] or curl it from your terminal
+	`GET http://127.0.0.1:9200/videos_en/_search`
 
 
 The elastic search part is based on this docker container:
