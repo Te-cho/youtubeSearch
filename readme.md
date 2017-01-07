@@ -11,7 +11,9 @@
 - To Stop / Delete the containers 
      ```sh
     $ make stop
-    or
+    ```
+    OR
+    ```sh
     $ make delete
     ```
 - To crawl the latest videos :
