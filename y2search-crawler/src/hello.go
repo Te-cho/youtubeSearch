@@ -200,7 +200,7 @@ func StoreValue(ytVideo YTVideo) {
 	// Prepare statement for inserting data
     // INSERTING VIDEO
     // Prepairing 
-    videoInsertQuery := "INSERT INTO videos (`id`, `video_id`,`video_url`,`video_title`) VALUES (NULL, ?, ?, ?)"
+    videoInsertQuery := "INSERT INTO videos (`id`, `video_hash_id`,`video_url`,`video_title`) VALUES (NULL, ?, ?, ?)"
     stmtVidIns, err := db.Prepare(videoInsertQuery) // ? = placeholder
     handleError(err)
     defer stmtVidIns.Close() // Close the statement when we leave main() / the program terminates
