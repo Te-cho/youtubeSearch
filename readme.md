@@ -9,16 +9,19 @@
     $ make up 
     ```
 - To Stop / Delete the containers 
+
      ```sh
     $ make stop
     ```
     OR
+
     ```sh
     $ make delete
     ```
 - To crawl the latest videos :
  - this will crawl the latest videos subtitles and meta data from videos from youtube
-	```sh
+	
+    ```sh
     $ make crawlVideos
     ```
 
