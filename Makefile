@@ -19,3 +19,5 @@ copyConfig:
 	docker cp docker/config/logstash/logstash.conf y2search_elk:/opt/logstash/config/logstash.conf
 indexMysql: copyConfig
 	docker exec -it y2search_elk bash -c "cd /opt/logstash; bin/logstash -f config/logstash.conf"
+crawlVideos:
+	docker exec -it y2search_crawler bash -c "go run hello.go"

@@ -220,6 +220,15 @@ func StoreValue(ytVideo YTVideo) {
         // Inserting
         _, err = stmtVidSubIns.Exec(lastInsertedId,file,`en`) // Insert tuples
         handleError(err)
+
+        // INSERTING VIDEO's Meta
+        // Prepairing 
+        stmtVidMetaIns, err := db.Prepare("INSERT INTO videos_meta (`id`, `video_id`) VALUES (NULL, ?)") // ? = placeholder
+        handleError(err)
+        defer stmtVidMetaIns.Close() // Close the statement when we leave main() / the program terminates
+        // Inserting
+        _, err = stmtVidMetaIns.Exec(lastInsertedId) // Insert tuples
+        handleError(err)
     }
 }
 
