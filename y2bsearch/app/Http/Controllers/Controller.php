@@ -24,7 +24,7 @@ class Controller extends BaseController
 					'type' => 'videosSubtitles',
 					'body' => [
 						'query' => [ 
-							'match' => ['subtitles' => 'create'] 
+							'match' => ['subtitles' => 'i '] 
 							],
 						'highlight' => [
 							'pre_tags'=>['<b>'], 
@@ -38,10 +38,8 @@ class Controller extends BaseController
 							]
 						]
 					];
-					// dd(json_encode($params['body']));
 					$response = $client->search($params);
 					$data['videos'] = $response['hits']['hits'];
-					// dd($data['videos'][0]['highlight']['subtitles'][0]);
 
 					return view('welcome', $data);
 
