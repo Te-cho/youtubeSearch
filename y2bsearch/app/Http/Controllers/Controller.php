@@ -8,13 +8,14 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Elasticsearch\ClientBuilder;
+use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
 	use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
-	public function show(){
-
+	public function show(Request $request){
+		$search_keyword = $request->get('search','was');
 		$hosts = $hosts = [
 					'y2search_elk:9200',         // IP + Port
 					];
@@ -24,7 +25,7 @@ class Controller extends BaseController
 					'type' => 'videosSubtitles',
 					'body' => [
 						'query' => [ 
-							'match' => ['subtitles' => 'i '] 
+							'match' => ['subtitles' => $search_keyword] 
 							],
 						'highlight' => [
 							'pre_tags'=>['<b>'], 
@@ -43,5 +44,5 @@ class Controller extends BaseController
 
 					return view('welcome', $data);
 
-				}
-			}
+		}
+}
