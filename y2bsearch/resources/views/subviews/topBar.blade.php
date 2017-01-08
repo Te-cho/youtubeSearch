@@ -15,4 +15,12 @@
     </div>
   </div>
 </header>
-<div class="demo-ribbon"></div>
+{{-- search bar --}}
+<div class="demo-ribbon-primary">
+  <div class="sw">
+    <center>
+    @include('subviews.searchBar')
+  </center>
+  </div>
+</div>
+<div class="demo-ribbon-secondary"></div>

@@ -24,21 +24,57 @@
         <!-- Main style -->
         <style>
             .demo-main {
-                margin-top: -25vh;
+                margin-top: -17vh;
                 -webkit-flex-shrink: 0;
                 -ms-flex-negative: 0;
                 flex-shrink: 0;
             }
         </style>
         <style type="text/css">
-          .demo-ribbon {
+          .demo-ribbon-primary {
             width: 100%;
-            height: 30vh;
+            height: 15vh;
             background-color: rgb(33,150,243);
             -webkit-flex-shrink: 0;
             -ms-flex-negative: 0;
             flex-shrink: 0;
           }
+          .demo-ribbon-secondary {
+            width: 100%;
+            height: 20vh;
+            background-color: rgba(33,150,243,0.7);
+            -webkit-flex-shrink: 0;
+            -ms-flex-negative: 0;
+            flex-shrink: 0;
+          }
+
+          .search {
+               color: rgba(0, 0, 0, 0.71);
+              font-family: helvetica;
+              flex: 1 1 auto;
+              order: 2;
+              outline: none;
+              border: none;
+              border-radius: 0;
+              background: #fff;
+              padding: 10px;
+              margin: 1vh;
+              font-family: 'Roboto', sans-serif;
+              height: 8vh;
+              transition: all 0.05s ease-in-out;
+              -webkit-appearance: none;
+              width: 30vw;
+              margin: 3vh;
+              font-size: 2vh;
+            }
+            .search:focus {
+              margin-left: -15px;
+              padding: 10px 15px;
+              width: 80vw;
+              margin: 1vh;
+              height: 13vh;
+              font-size: 6vh;
+            }
         </style>
     </head>
     <body>
