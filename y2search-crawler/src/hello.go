@@ -40,6 +40,7 @@ func handleError(err error){
 
 type YTVideo struct {
     id string
+    url string
     title  string
     description string
     thumbnailDefault string
@@ -50,21 +51,23 @@ type YTVideo struct {
 }
 func (video YTVideo) convertSearchResult(searchResult *youtube.SearchResult) YTVideo {
     video.id = searchResult.Id.VideoId
+    video.url  = "https://www.youtube.com/watch?v=" + video.id
     video.title  = searchResult.Snippet.Title
     video.description = searchResult.Snippet.Description
-    // video.thumbnailDefault = searchResult.Snippet.Thumbnails.default.url
-    // video.thumbnailMedium = searchResult.Snippet.Thumbnails.medium.url
-    // video.thumbnailHigh = searchResult.Snippet.Thumbnails.high.url
+    video.thumbnailDefault = searchResult.Snippet.Thumbnails.Default.Url
+    video.thumbnailMedium = searchResult.Snippet.Thumbnails.Medium.Url
+    video.thumbnailHigh = searchResult.Snippet.Thumbnails.High.Url
     video.publishedAt = searchResult.Snippet.PublishedAt
     return video
 }
 func (video YTVideo) convertVideoResult(videoResult *youtube.Video) YTVideo {
     video.id = videoResult.Id
+    video.url  = "https://www.youtube.com/watch?v=" + video.id
     video.title  = videoResult.Snippet.Title
     video.description = videoResult.Snippet.Description
-    // video.thumbnailDefault = videoResult.Snippet.Thumbnails.default.url
-    // video.thumbnailMedium = videoResult.Snippet.Thumbnails.medium.url
-    // video.thumbnailHigh = videoResult.Snippet.Thumbnails.high.url
+    video.thumbnailDefault = videoResult.Snippet.Thumbnails.Default.Url
+    video.thumbnailMedium = videoResult.Snippet.Thumbnails.Medium.Url
+    video.thumbnailHigh = videoResult.Snippet.Thumbnails.High.Url
     video.publishedAt = videoResult.Snippet.PublishedAt
     video.duration = videoResult.ContentDetails.Duration
     return video
@@ -94,7 +97,6 @@ func listTrending(c chan YTVideo, tPoolNum chan int) {
 
         // Iterate through each item and add it to the correct list.
         for _, item := range response.Items {
-        		// fmt.Printf(".")
                 videoObj := YTVideo{}.convertVideoResult(item)
                 c <- videoObj
         }
@@ -204,7 +206,7 @@ func StoreValue(ytVideo YTVideo) {
     stmtVidIns, err := db.Prepare(videoInsertQuery) // ? = placeholder
     handleError(err)
     defer stmtVidIns.Close() // Close the statement when we leave main() / the program terminates
-    result, err := stmtVidIns.Exec(ytVideo.id, `url`, ytVideo.title)// Inserting    
+    result, err := stmtVidIns.Exec(ytVideo.id, ytVideo.url, ytVideo.title)// Inserting    
     handleError(err)
     lastInsertedId, _ := result.LastInsertId()
 
@@ -223,11 +225,11 @@ func StoreValue(ytVideo YTVideo) {
 
         // INSERTING VIDEO's Meta
         // Prepairing 
-        stmtVidMetaIns, err := db.Prepare("INSERT INTO videos_meta (`id`, `video_id`) VALUES (NULL, ?)") // ? = placeholder
+        stmtVidMetaIns, err := db.Prepare("INSERT INTO videos_meta (`id`, `video_id`,`image_default`,`image_medium`,`image_high`) VALUES (NULL, ?, ?, ?, ?)") // ? = placeholder
         handleError(err)
         defer stmtVidMetaIns.Close() // Close the statement when we leave main() / the program terminates
         // Inserting
-        _, err = stmtVidMetaIns.Exec(lastInsertedId) // Insert tuples
+        _, err = stmtVidMetaIns.Exec(lastInsertedId,ytVideo.thumbnailDefault,ytVideo.thumbnailMedium,ytVideo.thumbnailHigh) // Insert tuples
         handleError(err)
     }
 }
@@ -259,7 +261,7 @@ func main() {
 	go listTrending(c,tPoolNum)
     go threadsPoolManager(tPoolNum)
 	
-	for i := 0; i<50; i++ {
+	for i := 0; i<5000; i++ {
 		go videosHandler(c, tPoolNum)
 	}
 
