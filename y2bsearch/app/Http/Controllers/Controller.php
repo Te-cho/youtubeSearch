@@ -25,7 +25,7 @@ class Controller extends BaseController
 					'type' => 'videosSubtitles',
 					'body' => [
 						'query' => [ 
-							'match' => ['subtitles' => $search_keyword] 
+							'terms' => ['subtitles' => explode(' ', $search_keyword)] 
 							],
 						'highlight' => [
 							'pre_tags'=>['<b>'], 
