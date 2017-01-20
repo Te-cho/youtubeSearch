@@ -7,14 +7,16 @@ use App\Src\AbstractBaseClass;
 class SearchProcessor extends AbstractBaseClass
 {
 
-    public function generateSearchQuery($search_keywords)
+    public function generateSearchQuery($searchKeywords)
     {
         $params = [
             'index' => 'videos_en',
             'type' => 'videosSubtitles',
             'body' => [
                 'query' => [
-                    'terms' => ['subtitles' => explode(' ', $search_keywords)],
+                    'bool' => [
+                        'must' => [],
+                    ],
                 ],
                 'highlight' => [
                     'pre_tags' => ['<b>'],
@@ -28,6 +30,12 @@ class SearchProcessor extends AbstractBaseClass
                 ],
             ],
         ];
+        $searchKeywords = explode(' ', $searchKeywords);
+        foreach ($searchKeywords as $searchKeyword) {
+            $params['body']['query']['bool']['must'][] = [
+                'term' => ['subtitles' => $searchKeyword],
+            ];
+        }
 
         return $params;
     }

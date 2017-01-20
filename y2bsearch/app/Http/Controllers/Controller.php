@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Src\EsService\EsService;
 use App\Src\SearchService\SearchProcessor;
+use App\Src\SubtitleAnalyzer\SubtitleAnalyzer;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -23,9 +24,8 @@ class Controller extends BaseController
 
         $params = $searchProcessor->generateSearchQuery($search_keywords);
         $response = $client->search($params);
-        $data['videos'] = $response['hits']['hits'];
-
-        // dd($data['videos'][0]['highlight']['subtitles']);
+        $subtitlesService = new SubtitleAnalyzer();
+        $data['videos'] = $subtitlesService->getTiming($response['hits']['hits'], $search_keywords);
 
         return view('welcome', $data);
 
