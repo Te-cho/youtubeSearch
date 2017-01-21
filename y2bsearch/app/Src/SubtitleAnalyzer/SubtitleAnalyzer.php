@@ -13,6 +13,7 @@ class SubtitleAnalyzer
      */
     public function getTiming(array $videos, string $searchTerm)
     {
+        dd($videos);
         $terms = explode(' ', $searchTerm);
         $termsCount = count($terms);
         foreach ($videos as $videoKey => $value) {
