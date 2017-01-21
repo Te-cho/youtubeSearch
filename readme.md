@@ -1,6 +1,5 @@
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
+[![N|Solid](https://circleci.com/gh/abdrmdn/youtubeSearch.svg?style=shield&circle-token=cc17df32efa1dba334a82631677827bec9117739)](https://nodesource.com/products/nsolid)
 
-https://circleci.com/gh/abdrmdn/youtubeSearch.svg?style=shield&circle-token=cc17df32efa1dba334a82631677827bec9117739
 
 ### SERVICES CONTROL (using MakeFile):
 - To Run all services :
