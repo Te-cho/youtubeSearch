@@ -3,3 +3,8 @@ general:
 dependencies:
   post:
    - mv /home/ubuntu/youtubeSearch/y2bsearch/.env.dev /home/ubuntu/youtubeSearch/y2bsearch/.env
+deployment:
+  push_to_server:
+    branch: 29-auto-deployment
+    commands:
+      - rsync -avz /home/ubuntu/youtubeSearch/ circleci@bitkumo.com:/youtubeSearch
