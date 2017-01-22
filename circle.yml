@@ -7,4 +7,4 @@ deployment:
   push_to_server:
     branch: 29-auto-deployment
     commands:
-      - rsync -avz /home/ubuntu/youtubeSearch/ circleci@139.59.238.155:/youtubeSearch
+      - rsync -avz /home/ubuntu/youtubeSearch/ root@139.59.238.155:/youtubeSearch
