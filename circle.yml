@@ -8,4 +8,4 @@ deployment:
     branch: 29-auto-deployment
     commands:
       - rsync -avz /home/ubuntu/youtubeSearch/ root@139.59.238.155:/youtubeSearch
-      - make -C /youtubeSearch/ up
+      - ssh -i ~/.ssh/id_rsa root@139.59.238.155 'make -C /youtubeSearch/ up'
