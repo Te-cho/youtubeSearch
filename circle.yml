@@ -1,2 +1,5 @@
 general:
   build_dir: y2bsearch
+dependencies:
+  post:
+   - mv /home/ubuntu/youtubeSearch/y2bsearch/.env.dev /home/ubuntu/youtubeSearch/y2bsearch/.env
