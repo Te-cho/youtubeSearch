@@ -5,7 +5,7 @@ dependencies:
    - mv /home/ubuntu/youtubeSearch/y2bsearch/.env.dev /home/ubuntu/youtubeSearch/y2bsearch/.env
 deployment:
   push_to_server:
-    branch: 29-auto-deployment
+    branch: master
     commands:
       - rsync -avz /home/ubuntu/youtubeSearch/ root@139.59.238.155:/youtubeSearch
       - ssh -i ~/.ssh/id_rsa root@139.59.238.155 'make -C /youtubeSearch/ up'
