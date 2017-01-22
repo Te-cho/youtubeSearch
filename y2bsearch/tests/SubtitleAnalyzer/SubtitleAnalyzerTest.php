@@ -151,6 +151,7 @@ class SubtitleAnalyzerTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
+        ];
     }
 }
