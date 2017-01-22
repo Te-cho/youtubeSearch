@@ -30,7 +30,7 @@
         ]
     },
     "scripts": {
-        "tests": "./bin/phpunit -c phpunit.xml tests/",
+        "tests": "./vendor/phpunit/phpunit/phpunit tests/",
         "psr-check": "./bin/phpcs --standard=PSR2 --ignore=app/helper,app/lang,storage/,tests/,resources/views/,assets/js/libs/,iprice*.js,*.css*,public/partners/*/js/*.js app/ public/ resources/scss/ src/ artisan gulpfile.js server.php",
         "post-root-package-install": [
             "php -r \"copy('.env.example', '.env');\""
