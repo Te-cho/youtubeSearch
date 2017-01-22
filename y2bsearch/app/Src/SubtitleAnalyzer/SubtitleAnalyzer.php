@@ -7,11 +7,11 @@ class SubtitleAnalyzer
 {
     /**
      * @param array $videos
-     * @param string $searchTerm
+     * @param $searchTerm
      *
      * @return array
      */
-    public function getTiming(array $videos, string $searchTerm)
+    public function getTiming(array $videos, $searchTerm)
     {
         $terms = explode(' ', $searchTerm);
         $termsCount = count($terms);
@@ -20,7 +20,7 @@ class SubtitleAnalyzer
             $subtitles = $value['_source']['_subtitles'];
             foreach ($subtitles['sentence'] as $key => $subtitle) {
                 $matchedTerms = 0;
-                foreach ($terms as $term){
+                foreach ($terms as $term) {
                     if (str_contains($subtitle, $term)) {
                         $matchedTerms++;
                     } else {
