@@ -1,5 +1,7 @@
-FROM golang:1.6-onbuild
+FROM golang:1.6
 
+RUN mkdir -p /go/src/
+WORKDIR /go/src/
 RUN curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
 RUN chmod a+rx /usr/local/bin/youtube-dl
 RUN go get -u google.golang.org/api/googleapi/transport
