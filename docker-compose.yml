@@ -28,6 +28,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile-elk
+    mem_limit: 2048m
     container_name: y2search_elk
     hostname: y2search_elk
     links: 
