@@ -11,3 +11,4 @@ RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '55d6ead61b29c7bde
 RUN php composer-setup.php --install-dir=/bin
 RUN php -r "unlink('composer-setup.php');"
 RUN mv /bin/composer.phar /bin/composer
+RUN chmod -R 777 /y2search/storage
