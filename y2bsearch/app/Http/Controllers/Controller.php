@@ -21,11 +21,11 @@ class Controller extends BaseController
         $search_keywords = $request->get('search', 'was');
         $searchProcessor = new SearchProcessor();
         $client = EsService::generateESConnection();
-
         $params = $searchProcessor->generateSearchQuery($search_keywords);
         $response = $client->search($params);
         $subtitlesService = new SubtitleAnalyzer();
-        $data['videos'] = $subtitlesService->getTiming($response['hits']['hits'], $search_keywords);
+        $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);
+        $data['videos'] = $response['hits']['hits'];
 
         return view('welcome', $data);
 

@@ -23,7 +23,7 @@ class SearchProcessor extends AbstractBaseClass
                     'post_tags' => ['</b>'],
                     'fields' => [
                         "subtitles" => [
-                            "fragment_size" => 30,
+                            "fragment_size" => 300,
                             "number_of_fragments" => 3,
                         ],
                     ],

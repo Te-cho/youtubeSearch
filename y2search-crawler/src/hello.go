@@ -151,10 +151,10 @@ func getVideoSuggestions(videoId string, videoChan chan YTVideo, pageToken strin
 // SRT Downloader
 func downloadVideo(id string) {
 	filename := "\"srts/" + id + ".srt\""
-    commandParams := " --write-auto-sub --skip-download \"https://www.youtube.com/watch?v=" + id + "\" -o " + filename
+    commandParams := " --write-auto-sub --skip-download -o " + filename + " -- " + id
     commandName := "youtube-dl"
     command := commandName + " " + commandParams
-    cmd := exec.Command("sh","-c", command)
+    cmd := exec.Command("bash","-c", command)
 	err := cmd.Run() // waits until the commands runs and finishes
     if err != nil {
 		log.Printf("%v",err)
