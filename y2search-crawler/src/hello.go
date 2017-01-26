@@ -160,7 +160,7 @@ func downloadVideo(id string) {
 		log.Printf("%v",err)
 	}
 	if debugOutput {log.Printf("command : %v", command)}
-    fmt.Println(".");
+    fmt.Print(".");
 }
 
 //Printers
@@ -179,7 +179,7 @@ func videosHandler(videoChan chan YTVideo, tPoolNum chan int) {
 
 // Initialize Mysql Connection
 func initializeMysqlConn(){
-    dbConn, err := sql.Open("mysql", "admin:admin@tcp(y2search_mysql:3306)/y2search_db")
+    dbConn, err := sql.Open("mysql", "admin:admin@tcp(y2search_mysql:3306)/y2search_db?collation=utf8mb4_unicode_ci")
     db = *dbConn
     if err != nil {
         panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
@@ -239,7 +239,7 @@ func StoreValue(ytVideo YTVideo) {
 
 func threadsPoolManager(tPoolNum chan int) {
     // So that we run only 10 at a time
-    for counter := 0; counter<10;counter++ {
+    for counter := 0; counter<100;counter++ {
         tPoolNum <- counter
     }
 }
