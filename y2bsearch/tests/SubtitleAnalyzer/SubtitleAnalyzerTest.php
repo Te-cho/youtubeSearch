@@ -65,7 +65,7 @@ class SubtitleAnalyzerTest extends \PHPUnit_Framework_TestCase
                             "video_id" => 68,
                             "upload_date" => null,
                         ],
-                        'highlight' => ['subtitles' => ["   do nowthat Donald Trump is"]],
+                        'highlight' => ['subtitles' => ["   do nowthat <b>Donald</b> Trump is"]],
                     ],
                     1 => [
                         "_index" => "videos_en",
@@ -104,7 +104,7 @@ class SubtitleAnalyzerTest extends \PHPUnit_Framework_TestCase
                             "video_id" => 68,
                             "upload_date" => null,
                         ],
-                        'highlight' => ['subtitles' => ["   do nowthat Donald Trump is"]],
+                        'highlight' => ['subtitles' => ["   do nowthat <b>Donald</b> Trump is"]],
                     ],
                 ],
                 'subtitles' => [
