@@ -9,7 +9,7 @@ services:
     volumes:
       - ./y2bsearch/:/y2search
     ports:
-      - "8123:80"
+      - "80:80"
   y2search_mysql:
     build:
       context: .
