@@ -12,6 +12,7 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "os/exec"
 import "io/ioutil"
+import "os"
 
 
 var (
@@ -212,6 +213,7 @@ func StoreValue(ytVideo YTVideo) {
 
     // Read subtitles file
     file, err := ioutil.ReadFile("srts/" + ytVideo.id + ".en.vtt")// it will be save with this extension regardless
+    os.Remove("srts/" + ytVideo.id + ".en.vtt");
     if debugOutput {fmt.Println(err)}
     if err == nil {
         // INSERTING VIDEO's Subtitles
