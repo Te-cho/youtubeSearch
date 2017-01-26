@@ -16,12 +16,22 @@ class Sanitizer
      */
     public function cleanFromXMLTags($sentence)
     {
+        $exceptionTags = '/(<b>)|(</b>)/';
+        $open = ['tag' => '<b>', 'value' => 'boldOpen'];
+        $close = ['tag' => '</b>', 'value' => 'boldClose'];
         $time = '/[0-9]*:[0-9]*:[0-9]*.[0-9]* --> [0-9]*:[0-9]*:[0-9]*.[0-9]*/';
         $tags = '/<[^>]*>/';
         $values = '/[a-z]+:[a-z|0-9|%]+/';
-        $res = preg_replace($tags, '', $sentence);
+        $misc = '/(\r?\n)/';
+        $res = $sentence;
+        $res = str_replace($open['tag'], $open['value'], $res);
+        $res = str_replace($close['tag'], $close['value'], $res);
+        $res = preg_replace($tags, '', $res);
         $res = preg_replace($time, '', $res);
         $res = preg_replace($values, '', $res);
+        $res = preg_replace($misc, '', $res);
+        $res = str_replace($open['value'], $open['tag'], $res);
+        $res = str_replace($close['value'], $close['tag'], $res);
 
         return $res;
     }

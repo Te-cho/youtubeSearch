@@ -9,7 +9,7 @@
     {{-- image API --}}
     {{-- https://img.youtube.com/vi/video_id/hqdefault.jpg --}}
     <div class="mdl-card__supporting-text">
-        ... {{ $highlighted_search }} ...
+        ... {!! $highlighted_search !!} ...
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-button--fab mdl-js-ripple-effect"
