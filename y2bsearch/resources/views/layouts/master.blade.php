@@ -29,7 +29,8 @@
             background: linear-gradient(to bottom, rgba(100, 100, 100, 0), rgba(0, 0, 0, 0.5));
             z-index: 0;
         }
-        .mdl-card__title-text{
+
+        .mdl-card__title-text {
             z-index: 1;
         }
     </style>
@@ -93,6 +94,7 @@
     </style>
 </head>
 <body>
+@include('scripts.ga')
 <div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
     @include("subviews.topBar")
     <div class="content demo-main">

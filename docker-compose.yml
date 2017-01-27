@@ -42,6 +42,7 @@ services:
       context: ./y2search-crawler/
       dockerfile: Dockerfile-crawler
     container_name: y2search_crawler
+    mem_limit: 1024m
     links: 
       - y2search_mysql
     volumes: 
