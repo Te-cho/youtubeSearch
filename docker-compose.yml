@@ -9,7 +9,7 @@ services:
     volumes:
       - ./y2bsearch/:/y2search
     ports:
-      - "8123:80"
+      - "80:80"
   y2search_mysql:
     build:
       context: .
@@ -42,6 +42,7 @@ services:
       context: ./y2search-crawler/
       dockerfile: Dockerfile-crawler
     container_name: y2search_crawler
+    mem_limit: 1024m
     links: 
       - y2search_mysql
     volumes: 
