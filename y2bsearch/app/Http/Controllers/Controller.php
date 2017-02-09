@@ -18,7 +18,7 @@ class Controller extends BaseController
 
     public function show(Request $request)
     {
-        $search_keywords = $request->get('search', 'was');
+        $search_keywords = strtolower($request->get('search', 'was'));
         $searchProcessor = new SearchProcessor();
         $client = EsService::generateESConnection();
         $params = $searchProcessor->generateSearchQuery($search_keywords);
