@@ -1,8 +1,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="Search for what they say, not their titles">
+<meta name="robots" content="index,follow">
+<meta name="keywords" content="search youtube videos content lyrics speech">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-<title>Youtube Search</title>
+
+<title>Search Youtubes</title>
 
 <!-- Add to homescreen for Chrome on Android -->
 <meta name="mobile-web-app-capable" content="yes">
@@ -22,4 +25,3 @@
 <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
 
 {{-- <link rel="canonical" href="http://www.example.com/"> --}}
-
