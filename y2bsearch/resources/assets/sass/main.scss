@@ -1,0 +1,40 @@
+//Square card
+
+body{
+  background-color: white;
+}
+@import "header";
+
+@import "components/search";
+
+@import 'components/video-card';
+
+@import "footer";
+
+//Main Style
+.demo-main {
+  margin-top: -17vh;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+//
+.demo-ribbon-primary {
+  width: 100%;
+  height: 15vh;
+  background-color: rgb(33, 150, 243);
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.demo-ribbon-secondary {
+  width: 100%;
+  height: 20vh;
+  background-color: rgba(33, 150, 243, 0.7);
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
