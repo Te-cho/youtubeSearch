@@ -6,6 +6,8 @@ ifndef modules
 endif
 up: 
 	docker-compose up -d
+upProduction: up
+    docker exec -it y2search bash -c "cd /y2search/; npm run prod;"
 down:
 	docker-compose down
 stop:
