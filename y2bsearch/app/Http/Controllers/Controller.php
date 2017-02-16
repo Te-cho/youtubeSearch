@@ -27,7 +27,7 @@ class Controller extends BaseController
         $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);
         $data['videos'] = $response['hits']['hits'];
 
-        return view('welcome', $data);
+        return view('search-page', $data);
 
     }
 }
