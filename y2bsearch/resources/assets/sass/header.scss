@@ -1,1 +1,8 @@
 // @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+#header {
+  background-color: $color-grey;
+  height: 5vh;
+  padding: 25px 45px;
+  width: 100%;
+  position: fixed;
+}

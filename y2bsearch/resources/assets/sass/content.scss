@@ -1,0 +1,13 @@
+// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+.content {
+  padding-top: 10vh;
+  margin: auto;
+  max-width: 1200px;
+
+  @import "components/search";
+
+  #videos {
+    background-color: rgba(1,1,1,0.01);
+    @import 'components/video-card';
+  }
+}

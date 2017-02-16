@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section("content")
-<div class="content">
-	@include('subviews.videos')
-</div>
+
+    @include('subviews.videos')
+
 @endsection("content")

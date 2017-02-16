@@ -10,11 +10,9 @@
 <body>
 @include('scripts.ga')
 @include('subviews.header')
-<div class="">
+<div class="content">
     @yield("content")
 </div>
 @include('subviews.footer')
-
-{{--@include("subviews.topBar")--}}
 </body>
 </html>

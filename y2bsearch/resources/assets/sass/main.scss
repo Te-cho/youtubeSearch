@@ -1,14 +1,17 @@
 //Square card
 
-body{
+body {
   background-color: white;
   color: black;
+  padding: 0px;
+  margin: 0px;
 }
+
+@import "init";
+
 @import "header";
 
-@import "components/search";
-
-@import 'components/video-card';
+@import "content";
 
 @import "footer";
 
