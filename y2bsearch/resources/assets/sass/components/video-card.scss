@@ -1,4 +1,84 @@
 // @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+.video-card {
+  position: relative;
+  transition: all 0.2s ease 0s;
+  top: 0; /* start out at position 0 */
+  width: 22vw;
+  height: 22vw;
+  max-width: 22vw;
+  max-height: 22vw;
+  display: inline-block;
+  margin-bottom: 10px;
+  font-family: myriad pro;
+  font-size: 10pt;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin-right: 2vw;
+  margin-top: 2vw;
+  &:hover{
+    top: -10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+  &:nth-child(3n) {
+    margin-right: 0vw;
+  }
+  & > div {
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: hidden;
+  }
+  .title {
+    height: 11%;
+    font-weight: 600;
+    padding-top: 2%;
+    padding-bottom: 0%;
+    /* white-space: nowrap; */
+  }
 
+  .text {
+    height: 30%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    .desc {
+      padding-top: 5%;
+    }
+
+    .spots {
+      color: $color-grey-text;
+      padding-top: 5%;
+    }
+  }
+  .like-share {
+    position: absolute;
+    bottom: 0px;
+    width: 90%;
+    left: 2%;
+    height: 10%;
+    border-top: 1px solid black;
+    padding-top: 7px;
+    span{
+      float: right;
+      width: 10px;
+      height: 10px;
+      margin-left: 2%;
+      &.like{
+        background-color: #00d6b2;
+      }
+      &.share{
+        background-color: #00AA00;
+      }
+    }
+  }
+  .image {
+    border: 0px;
+    margin: 0px;
+    width: 100%;
+    padding: 0px;
+    img {
+      width: 100%;
+    }
+  }
+}
 
