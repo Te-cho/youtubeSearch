@@ -1,9 +1,25 @@
 // @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-#header {
+#header{
   background-color: $color-grey;
   height: 5vh;
   padding: 25px 45px;
   width: 100%;
   position: fixed;
   z-index: 100;
+  &>*{
+    display: inline-block;
+    float: left;
+  }
+  #logo{
+    max-width: 115px;
+  }
+  .searchbar{
+    width: 80%;
+    form{
+      text-align: center;
+      input{
+        width: 40vw;
+      }
+    }
+  }
 }

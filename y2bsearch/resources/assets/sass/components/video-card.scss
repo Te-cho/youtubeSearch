@@ -64,10 +64,12 @@
       height: 10px;
       margin-left: 2%;
       &.like{
-        background-color: #00d6b2;
+        background-image: url(/images/loveicon.png);
+        background-size: 100% 100%;
       }
       &.share{
-        background-color: #00AA00;
+        background-image: url(/images/shareicon.png);
+        background-size: 100% 100%;
       }
     }
   }

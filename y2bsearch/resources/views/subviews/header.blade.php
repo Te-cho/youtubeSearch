@@ -1,5 +1,4 @@
 <section id="header">
-	<header>
-		@include('subviews.searchBar')
-	</header>
+	<img id="logo" src="{{asset('images/logo.png')}}">
+	@include('subviews.searchBar')
 </section>
