@@ -1,29 +1,26 @@
-<div class="video-card">
-    {{--<a href="{{ $video['video_url'] }}">--}}
-    {{--</a>--}}
-    {{--title--}}
-    <div class="title">
-        {{ $video['video_title'] }}
-    </div>
-    {{--image--}}
-    <figure class="image gingham">
-        <img src="{{$video['image_medium']}}">
-    </figure>
-
-    <div class="text">
-        {{--desc--}}
-        {{--<div class="desc">--}}
-            {{--desc--}}
-        {{--</div>--}}
-        {{--spots--}}
-        <div class="spots">
-            " {!! $highlighted_search !!} "
+<div class="column">
+    <center>
+        {{--<a href="{{ $video['video_url'] }}">--}}
+        {{--</a>--}}
+        <div class="ui video-card card">
+            <div class="content">
+                {{ $video['video_title'] }}
+            </div>
+            <div class="image gingham">
+                <img src="{{$video['image_medium']}}">
+            </div>
+            <div class="content">
+                {{--<div class="header">Matt Giampietro</div>--}}
+                <div class="description">
+                    " {!! $highlighted_search !!} "
+                </div>
+            </div>
+            <div class="extra content">
+          <span class="right floated">
+            <i class="like icon"></i>
+            <i class="share icon"></i>
+          </span>
+            </div>
         </div>
-    </div>
-
-    {{--like&share--}}
-    <div class="like-share">
-        <span class="like"></span>
-        <span class="share"></span>
-    </div>
+    </center>
 </div>
