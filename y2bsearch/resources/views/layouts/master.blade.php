@@ -10,7 +10,7 @@
 <body>
 @include('scripts.ga')
 @include('subviews.header')
-<div class="content">
+<div id="content">
     @yield("content")
 </div>
 @include('subviews.footer')
