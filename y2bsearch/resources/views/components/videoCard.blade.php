@@ -6,9 +6,9 @@
             <div class="content">
                 {{ $video['video_title'] }}
             </div>
-            <div class="image gingham">
+            <a target="_blank" href="{{ $video['video_url'] }}" class="image gingham">
                 <img src="{{$video['image_medium']}}">
-            </div>
+            </a>
             <div class="content">
                 {{--<div class="header">Matt Giampietro</div>--}}
                 <div class="description">
@@ -16,10 +16,10 @@
                 </div>
             </div>
             <div class="extra content">
-          <span class="right floated">
-            <i class="like icon"></i>
-            <i class="share icon"></i>
-          </span>
+              <span class="right floated">
+                <i class="like icon"></i>
+                <i class="share alternate icon"></i>
+              </span>
             </div>
         </div>
     </center>

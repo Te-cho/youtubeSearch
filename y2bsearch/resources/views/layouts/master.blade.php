@@ -13,6 +13,6 @@
 <div class="content">
     @yield("content")
 </div>
-{{--@include('subviews.footer')--}}
+@include('subviews.footer')
 </body>
 </html>

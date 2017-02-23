@@ -13,6 +13,7 @@ class SearchProcessor extends AbstractBaseClass
             'index' => 'videos_en',
             'type' => 'videosSubtitles',
             'body' => [
+                'size' => 9,
                 'query' => [
                     'bool' => [
                         'must' => [],

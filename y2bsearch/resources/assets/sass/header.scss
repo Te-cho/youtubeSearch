@@ -1,28 +1,36 @@
 // @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-#header{
-  background-color: $color-grey;
-  .logo{
-    width: 6.5em;
+#header {
+  background-color: $color-turquise;
+  .logo {
+    width: 6em;
   }
-  form{
-    @media only screen and (min-width: 1200px){
+  @media only screen and (min-width: 1200px) {
+    .logo {
+      width: 8em;
+    }
+    .ui.container {
+      width: 100%;
+    }
+  }
+  form {
+    @media only screen and (min-width: 1200px) {
       width: 50%;
       margin-left: 15%;
       margin-bottom: 5px;
     }
   }
-  .input{
+  .input {
     border-radius: 0px;
-    input{
+    input {
       border-radius: 0px;
     }
-    &>.icon{
-      color:$color-turquise;
+    & > .icon {
+      color: $color-dark-blue;
       background-color: white;
       border-radius: 0px;
       border-left: 1px solid black;
     }
-    @media only screen and (min-width: 1200px){
+    @media only screen and (min-width: 1200px) {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
   }
