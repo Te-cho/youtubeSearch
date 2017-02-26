@@ -15,8 +15,9 @@ class SearchProcessor extends AbstractBaseClass
             'body' => [
                 'size' => 9,
                 'query' => [
-                    'bool' => [
-                        'must' => [],
+                    'query_string' => [
+                        'default_field' => "subtitles",
+                        'query' => ""
                     ],
                 ],
                 'highlight' => [
@@ -31,12 +32,9 @@ class SearchProcessor extends AbstractBaseClass
                 ],
             ],
         ];
-        $searchKeywords = explode(' ', $searchKeywords);
-        foreach ($searchKeywords as $searchKeyword) {
-            $params['body']['query']['bool']['must'][] = [
-                'term' => ['subtitles' => $searchKeyword],
-            ];
-        }
+        $searchKeywords = '*'.str_replace(' ',' AND ', $searchKeywords);
+        $searchKeywords .='*';
+        $params['body']['query']['query_string']['query']=$searchKeywords;
 
         return $params;
     }
