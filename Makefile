@@ -7,7 +7,7 @@ endif
 up: 
 	docker-compose up -d
 upProduction: up
-	docker exec -it y2search bash -c "cd /y2search/; chmod -R 777 storage; npm install; npm run prod;"
+	docker exec -it y2search bash -c "cd /y2search/; npm install; npm run prod;"
 down:
 	docker-compose down
 stop:
