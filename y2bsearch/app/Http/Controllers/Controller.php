@@ -18,7 +18,31 @@ class Controller extends BaseController
 
     public function show(Request $request)
     {
-        $search_keywords = strtolower($request->get('search', 'was'));
+        $search_keywords = strtolower($request->get('search', ''));
+        if (empty($search_keywords)) {
+            return $this->mainPage($search_keywords);
+        } else {
+            return $this->searchPage($search_keywords);
+        }
+
+    }
+
+    public function mainPage($search_keywords)
+    {
+        $searchProcessor = new SearchProcessor();
+        $client = EsService::generateESConnection();
+        $params = $searchProcessor->generateTopSearchQuery();
+        $response = $client->search($params);
+        $subtitlesService = new SubtitleAnalyzer();
+        $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);
+        $data['videos'] = $response['hits']['hits'];
+        $data['mainPage'] = true;
+
+        return view('main-page', $data);
+    }
+
+    public function searchPage($search_keywords)
+    {
         $searchProcessor = new SearchProcessor();
         $client = EsService::generateESConnection();
         $params = $searchProcessor->generateSearchQuery($search_keywords);
@@ -28,6 +52,5 @@ class Controller extends BaseController
         $data['videos'] = $response['hits']['hits'];
 
         return view('search-page', $data);
-
     }
 }

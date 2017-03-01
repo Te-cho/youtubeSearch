@@ -11,5 +11,5 @@
 |
 */
 
-Route::get('', 'HomeController@show');
-Route::get('/search/{search?}', 'Controller@search');
+Route::get('/{search?}', 'Controller@show');
+Route::get('/', 'HomeController@show');

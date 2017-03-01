@@ -18,17 +18,6 @@ class HomeController extends BaseController
 
     public function show(Request $request)
     {
-        $search_keywords = strtolower($request->get('search', 'was'));
-        $searchProcessor = new SearchProcessor();
-        $client = EsService::generateESConnection();
-        $params = $searchProcessor->generateTopSearchQuery();
-        $response = $client->search($params);
-        $subtitlesService = new SubtitleAnalyzer();
-        $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);
-        $data['videos'] = $response['hits']['hits'];
-        $data['mainPage'] = true;
-
-        return view('main-page', $data);
-
+        
     }
 }

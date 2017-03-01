@@ -5,7 +5,9 @@
       width: calc(960px + 2rem) !important;
     }
   }
-
+  .header.divider a{
+    color: $color-grey-dark;
+  }
   .infographics {
     .row {
       display: none;
