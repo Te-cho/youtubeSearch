@@ -3,6 +3,7 @@
         <div href="/" class="header item">
             <img class="logo" src="{{asset('images/logo.png')}}">
         </div>
+        @if($showSearch)
         <form method="GET" action="/" class="header item">
             <div class="ui action input">
                 <input type="search" name="search" placeholder="Search...">
@@ -11,5 +12,6 @@
                 </button>
             </div>
         </form>
+        @endif
     </div>
 </div>

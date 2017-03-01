@@ -11,5 +11,5 @@
 |
 */
 
-Route::get('', 'Controller@show');
+Route::get('', 'HomeController@show');
 Route::get('/search/{search?}', 'Controller@search');

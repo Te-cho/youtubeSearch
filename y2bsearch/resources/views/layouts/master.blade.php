@@ -14,10 +14,9 @@
 </head>
 <body>
 @include('scripts.ga')
-@include('subviews.header')
-<div id="content">
-    @yield("content")
-</div>
+
+@yield("content")
+
 @include('subviews.footer')
 </body>
 </html>

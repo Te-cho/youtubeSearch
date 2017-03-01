@@ -1,0 +1,48 @@
+#mainPage {
+
+  @media only screen and (min-width: 1200px) {
+    .container {
+      width: calc(960px + 2rem) !important;
+    }
+  }
+
+  .infographics {
+    .row {
+      display: none;
+    }
+    .mobile {
+      @media only screen and (max-width: 1200px) {
+        display: block;
+      }
+    }
+    .desktop {
+      @media only screen and (min-width: 1200px) {
+        display: block;
+      }
+    }
+
+  }
+  form {
+    margin: auto;
+    @media only screen and (min-width: 1200px) {
+      width: 70%;
+    }
+    .input {
+      border: 1px solid $color-grey-dark;
+      width: 100%;
+      border-radius: 0px;
+      input {
+        border-radius: 0px;
+      }
+      & > .icon {
+        color: $color-dark-blue;
+        background-color: white;
+        border-radius: 0px;
+        border-left: 1px solid black;
+      }
+    }
+  }
+  #videos {
+    margin-top: 10px;
+  }
+}
