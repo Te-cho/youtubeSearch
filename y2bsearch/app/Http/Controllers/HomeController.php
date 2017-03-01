@@ -21,7 +21,7 @@ class HomeController extends BaseController
         $search_keywords = strtolower($request->get('search', 'was'));
         $searchProcessor = new SearchProcessor();
         $client = EsService::generateESConnection();
-        $params = $searchProcessor->generateSearchQuery($search_keywords);
+        $params = $searchProcessor->generateTopSearchQuery();
         $response = $client->search($params);
         $subtitlesService = new SubtitleAnalyzer();
         $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);

@@ -1,12 +1,31 @@
 #mainPage {
-  margin-top: 5vh;
-  .infographics.container{
-    wid
+
+  @media only screen and (min-width: 1200px) {
+    .container {
+      width: calc(960px + 2rem) !important;
+    }
+  }
+
+  .infographics {
+    .row {
+      display: none;
+    }
+    .mobile {
+      @media only screen and (max-width: 1200px) {
+        display: block;
+      }
+    }
+    .desktop {
+      @media only screen and (min-width: 1200px) {
+        display: block;
+      }
+    }
+
   }
   form {
-    margin:auto;
+    margin: auto;
     @media only screen and (min-width: 1200px) {
-      width: 50%;
+      width: 70%;
     }
     .input {
       border: 1px solid $color-grey-dark;
@@ -22,5 +41,8 @@
         border-left: 1px solid black;
       }
     }
+  }
+  #videos {
+    margin-top: 10px;
   }
 }
