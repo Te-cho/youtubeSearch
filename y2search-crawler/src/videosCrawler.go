@@ -12,7 +12,7 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "io/ioutil"
 import "os"
-import "github.com/youtube_dl"
+import "github.com/youtube-videos/go-youtube-dl"
 import "app/ytvideo"
 
 var (
@@ -20,7 +20,7 @@ var (
 	listingVideos = flag.String("chart", "mostPopular", "")
 	maxResults = flag.Int64("max-results", 50, "Max YouTube results")
 	db sql.DB
-	debugOutput = true
+	debugOutput = false
 	number = 0
 )
 // var db sql.DB

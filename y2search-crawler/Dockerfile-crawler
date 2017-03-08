@@ -7,3 +7,4 @@ RUN chmod a+rx /usr/local/bin/youtube-dl
 RUN go get -u google.golang.org/api/googleapi/transport
 RUN go get -u google.golang.org/api/youtube/v3
 RUN go get github.com/go-sql-driver/mysql
+RUN go get github.com/youtube-videos/go-youtube-dl
