@@ -5,6 +5,15 @@
 <meta name="keywords" content="search youtube videos content lyrics speech">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
+<meta property="og:url"                content="http://searchyoutubes.com" />
+<meta property="og:type"               content="media" />
+<meta property="og:title"              content="Search Youtubes" />
+<meta property="og:description"        content="HSearch for what they say, not their titles" />
+<meta property="og:image"              content="{{asset('images/logo.png')}}" />
+
+The properties include descriptive meta-data about the article that we specifically want to present when someone shares the article.
+
+
 <title>Search Youtubes</title>
 
 <!-- Add to homescreen for Chrome on Android -->
