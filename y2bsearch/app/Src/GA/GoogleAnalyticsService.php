@@ -2,6 +2,9 @@
 
 namespace App\Src\GA;
 
+use Exception;
+use Google_Client;
+use Google_Service_Analytics;
 
 class GoogleAnalyticsService
 {
@@ -9,9 +12,8 @@ class GoogleAnalyticsService
     /**
      *
      */
-    public function main()
+    public function printResultss()
     {
-        dd('asd', config('services.ga'));
         $analytics = $this->initializeAnalytics();
         $profile = $this->getFirstProfileId($analytics);
         $results = $this->getResults($analytics, $profile);
@@ -33,7 +35,7 @@ class GoogleAnalyticsService
         // Create and configure a new client object.
         $client = new Google_Client();
         $client->setApplicationName("SearchYuotubes");
-        $client->setAuthConfig($config);
+        $client->setAccessToken($config);
         $client->setScopes(['https://www.googleapis.com/auth/analytics.readonly']);
         $analytics = new Google_Service_Analytics($client);
 

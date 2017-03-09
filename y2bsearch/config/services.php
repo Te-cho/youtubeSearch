@@ -38,14 +38,42 @@ return [
     'ga' => [
         "type" => "service_account",
         "project_id" => "youtubesearch-151013",
-        "private_key_id" => "90b8ace0b2fe774b96b43609b99871593546f6e8",
-        "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCmHo6jF7OMPBz9\nTbkRe4I9LnN9M+uEXTV27K6DO6kVfQUzXC3DYSl8wj+f1nsJg7xr3kZdFPO5LWdP\nY+QHTm3/2YYEEDU6XY9ZpdGBa46T54QXyz3KMAXbqrVqKFs52CwieBVbOAKB4AH7\nMl/zj+KXaL8hXDHIb1N4glME/2xRpn/DNpDPBfs+oK5+lAl1ZN20pfpowTDeP+aQ\nOk9fBZNrik2g46VI8I81CePxfDSAU7FGPk7tXFyAl+P+/5ebeg+iJ+0TDotVwEBf\nLLdVLK5veMAlk8I3InpWz2DtuyH2TdlrG5T1t2voXNgS2yfqOWXVha7HZ6o2n+tq\nSf4sn97TAgMBAAECggEBAJN3/wHzsXWli8qma8uETEsJ6IZWSBa6NBM963IezWyB\nDtPYWdvfblgNjTPU0GbS5rsPmIFbbz2Ne+/zamO+EVKWhS0oQkhs9CwOUx1EIU9V\nsGL7DwBlf13Rfrkd2FZSfGOhHLxczYUEGl4oCxwKOIpW942i7aLUiVIqx45hPYSB\nDso86r+1sDM8MFHDuqpXCmthinrrCnqjT87Bw6KaOIKlOV9sN+8qf8VLPHKe06i+\nDmKJMjmJy7epBWs7g4BrrqbWbZ/iE5oJf9Uto4LCX6mG6kagCtSFolCVTi9P8Lr4\n03MYq4nZME/qGavyU2WIcZC990QI2vnOuKrxhorZADECgYEA2HtujFhouuCb4p+h\nceIp9BDjrAlVIcnjdD6CdVPDw60X1Sj7I2yL7LhTw1499XVvVSd16OHQ0pad4PSm\n50XxBsfY7/OaFnf3/kA5Q0DOFbra1sf3q98e8HCQmcVj78bBJ2IzceoK5p/rHWPk\nKR1AxFkibrgZbfF9NhIys0WYHJsCgYEAxHGWytS7n0IZAQ1UfrRuV+lcm+lJi9lX\njBLHhyjyKamyaPWNwFVcoqoAt2XC5xRslMHWxVC2QT8xObQBeS2AWAYFGS1g5TrM\nRHe24+jDj9ttt4fnNcomHuPAgY1i9SaY3DTvTnOQa5AzfFLMR+ttALgI3qyc2X7d\nAcS7POz9fikCgYEAgujJZgdEddXDjpy3lVWNxzC7bNpL593dNPtkCq030cmHgviA\nPeCzENg6lwcTcq6sP5NYQxbjH6XDHTj1ASATa+VIM3pdML8lcVPHDPtQZGWVVpKg\nHAgV/pIjb0mlcGcBgN5qe7VrGCGWnTQ90fsFonbAUrHzdr+01xDUJgKsxIcCgYAE\nZbKFaculXfpnTqAUkf9iUmPzTX6K9duC1CzJNr5s9lJ7DPwWURLYxUtsz4dUWt2v\nWsNu+UaLIVn9u6zIxJ752XClxqFDoFRQOAnNAjnWb4f+MrmXN6YwzNJTVBHiAPIt\nA7ZToDycW8b7QnM2LOvstzHjoiOErtVNo9S5IWjvOQKBgF9GZs7CJZENb8sqhmcH\nIat4mhQEnSMqJfMJsfnOQ5FykmZBgQhuy2X/bTdWT4tYdZG/Wk9vBHrZMS6LRgaY\nQxyAdzsXcP6IIiJnYEMLjFFekFbVMwRgwYR+pBpvZmYNmxEoXVIYXh/yo6LLIU6R\ntW0vQGZGbQYBzUZU5XyTwm+X\n-----END PRIVATE KEY-----\n",
-        "client_email" => "searchyoutubesanalytics@youtubesearch-151013.iam.gserviceaccount.com",
-        "client_id" => "105473191996490009005",
+        "private_key_id" => "56754a5935fbcac60c8528059c4bfab995fcc852",
+        "private_key" => "-----BEGIN PRIVATE KEY-----\n
+        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC2XSai+Ut7X4cV\n
+        0Hf9vuGWXy20ZB2AhtuizVnhwJh3KbzaiWB9byrLPTKPCnOXbtFMWkbbWGw4OKlv\n
+        o+AXRIn5wR/z6SsHqkNT4sTfHbEZpOcHTUeKLUbhY5ClwXu0TShoeHS7lWUZBz/E\n
+        RItGbdSHF3hajqd/QLmLauBVzgceUEogooHBNays6jaAICm2kwiQUGjns3SKYdYO\n
+        VYDGJH7Wl7RaBLLneYZdc1t3dwIllXSsuWkWQIHbsWXXVHfBT5z0lByVNzwItech\n
+        KXRH+cGmKkApbOGu2EKs/CLwP7Am/DgoGeqXOiRTvBYJO2BCJL+uVWKJdtlr+LVw\n
+        NQ+yovD5AgMBAAECggEBAJOiVeUabUEz1OiUHJAQOBDEfPvNERU8GBN0q49XnBbc\n
+        c0d4b+UcWkivAn9KtsmhrU9ixnpM20+oj4MR6BjuI8VN09Bis7NA48DFlRwLrZRV\n
+        K7N9nK0AeqF9OVz3hm4xCMWKvvYdu/rHI5iA5T/fKm8zUPv/ARrEC3IS1AqjAKBI\n
+        gK4J7BlbNwyjLnlvZ/nTxt8vuo+uZgW7nBB+H8wYHCUvb0bAdMddL/RmmOegr+rj\n
+        ajliWZd6KSrd9ZhtCq35wmrKA8hshOSqJSYO0W9fK4RXYlX/03XDQQdOcNh8K2mM\n
+        pAEg3WZYCrKHSXaiMBO0YRERgdMZIXXafvnVH+hXoAECgYEA6sIizh4D2PrEAJUH\n
+        ERYKmUL8PFr4VGs+a/5X2oyJS7JsQB2vIFRJDTNTyj8H+rToxRMfQex5ld6KANmL\n
+        1tjBFsPaPyE2FOwkEc6HW5SXQqKF1J2NZDF3qBa3oZdhvgKZXCFGlaq8pE+cmWHs\n
+        xaPEcLAu3NhgJYCPgmbKvatI61ECgYEAxt1d6m9HrEkHWoc1p2e7sXMMaCbvrBFj\n
+        e5siyCT0jy2v1T+ANZYw0vExuPzdd8oijEHXNHi8a1jVto/9kuG92MYgyA57rzZI\n
+        SkgxHVdvVhSc0nfx0YkAnBR+mT8E1iro0NfdEPOkymMl/b6Qz3kkw2LizXeFT3xC\n
+        pwy3FsAO8SkCgYEA3HOYSaTICi9adg18iGABbfEIewkWX/ghszoyeAo3N/2CSCdX\n
+        +G0N+LZ1fdv4+0Z9u+t8E+UkPEexoqCoAAamNGGRBm2Cot0p9grS834zGSETuhiF\n
+        2UvWyOMkaDuHTu6T439gEFY4NbiJH0RlGyfx5bydFUif6Te0DEnJI5nArTECgYAq\n
+        Q1F6STwKOVr+uk2Ezl7tT24LlHrLLsbdthKmRnRTGXqM73nn6YtmySuwDM1kb+j3\n
+        teZumFoy1iZVLjTNynv2XeUJn0pZ6kdiwgTuH27h9G9/q04RIfSnNxPQrbvxaB0i\n
+        hT3OJHmZKYkhbCaKcUyG2bUpxYTnZ5kit2kRxK9oQQKBgAJ17IL37yMl4yy3bl79\n
+        oqKqr49ikv/DI7uz92tyip35EBxTsJCspKNvTLR9mVwou2QrKijC1pKcX/OUN7AM\n
+        r6nRA9ArdRHjAPp0uxpz/3q4JphiQEEi1EHoBib6JKezG/Xv32P2wiRdWT6b2uM1\n
+        4Tp3dqYEJtOxXGUJwGACuLFm\n
+        -----END PRIVATE KEY-----\n
+        ",
+        "client_email" => "ytsearchanalytics@youtubesearch-151013.iam.gserviceaccount.com",
+        "client_id" => "104421361846623047390",
         "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
         "token_uri" => "https://accounts.google.com/o/oauth2/token",
         "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/searchyoutubesanalytics%40youtubesearch-151013.iam.gserviceaccount.com",
+        "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/ytsearchanalytics%40youtubesearch-151013.iam.gserviceaccount.com",
     ],
 
 
