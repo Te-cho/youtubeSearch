@@ -4,14 +4,19 @@
             <img class="logo" src="{{asset('images/logo.png')}}">
         </div>
         @if($showSearch)
-        <form method="GET" action="/" class="header item">
-            <div class="ui action input">
-                <input type="search" name="search" placeholder="Search...">
-                <button class="ui icon button">
-                    <i class="search icon"></i>
-                </button>
+            <form method="GET" action="/" class="header item">
+                <div class="ui action input">
+                    <input type="search" name="search" placeholder="Search...">
+                    <button class="ui icon button">
+                        <i class="search icon"></i>
+                    </button>
+                </div>
+            </form>
+        @else
+            <div style="float: right;position: absolute;right: 1vh;top: 1.6vh;color: white;font-size: 1.3em;">
+                <i class="users icon"></i>
+                <span>{{$pageViews}}</span>
             </div>
-        </form>
         @endif
     </div>
 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Src\EsService\EsService;
+use App\Src\GA\GoogleAnalyticsService;
 use App\Src\SearchService\SearchProcessor;
 use App\Src\SubtitleAnalyzer\SubtitleAnalyzer;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -16,8 +17,14 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show(Request $request)
     {
+//        (new GoogleAnalyticsService)->printResultss();
         $search_keywords = strtolower($request->get('search', ''));
         if (empty($search_keywords)) {
             return $this->mainPage($search_keywords);
