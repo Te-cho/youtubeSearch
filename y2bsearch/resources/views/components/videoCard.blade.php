@@ -14,7 +14,7 @@
             </div>
             <div class="extra content">
               <span class="right floated">
-                <i class="like icon"></i>
+                {{--<i class="like icon"></i>--}}
                   {{--<i class="share alternate icon"></i>--}}
                   <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($video['video_url']) }}" target="_blank"><i
                               class="facebook f icon"></i></a>
