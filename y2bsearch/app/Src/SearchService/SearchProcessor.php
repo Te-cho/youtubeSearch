@@ -9,7 +9,7 @@ class SearchProcessor extends AbstractBaseClass
 
     public function generateTopSearchQuery()
     {
-        $searchKeywords="awesome";
+        $searchKeywords="search";
         $params = [
             'index' => 'videos_en',
             'type' => 'videosSubtitles',
