@@ -35,6 +35,10 @@ class PageViewsCounter
         fwrite($f, $counterVal);
         fclose($f);
 
+        view()->share(
+            'pageViews', $counterVal
+        );
+
         return $next($request);
     }
 
