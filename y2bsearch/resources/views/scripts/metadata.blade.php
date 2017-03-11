@@ -5,6 +5,12 @@
 <meta name="keywords" content="search youtube videos content lyrics speech">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
+<meta property="og:url"                content="http://searchyoutubes.com" />
+<meta property="og:type"               content="media" />
+<meta property="og:title"              content="Search Youtubes" />
+<meta property="og:description"        content="Search for what they say, not their titles" />
+<meta property="og:image"              content="{{asset('images/logo.png')}}" />
+
 <title>Search Youtubes</title>
 
 <!-- Add to homescreen for Chrome on Android -->

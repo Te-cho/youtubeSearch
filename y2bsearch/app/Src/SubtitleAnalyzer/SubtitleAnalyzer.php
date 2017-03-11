@@ -37,6 +37,10 @@ class SubtitleAnalyzer
             $start = strtotime($subtitles['start'][$index]) - strtotime('TODAY');
 //            $end = strtotime($subtitles['end'][$index]) - strtotime('TODAY');
             $sentence = $subtitles['sentence'][$index];
+            if($start === 0){
+                unset($videos[$videoKey]);
+                continue;
+            }
             $videos[$videoKey]['_source']['start'] = $start;
             $videos[$videoKey]['_source']['sentence'] = $sentence;
             $videos[$videoKey]['_source']['video_url'] = $videos[$videoKey]['_source']['video_url'] . '&t=' . $start;

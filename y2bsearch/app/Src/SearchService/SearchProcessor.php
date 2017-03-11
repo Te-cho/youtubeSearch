@@ -9,7 +9,7 @@ class SearchProcessor extends AbstractBaseClass
 
     public function generateTopSearchQuery()
     {
-        $searchKeywords="top";
+        $searchKeywords = "search";
         $params = [
             'index' => 'videos_en',
             'type' => 'videosSubtitles',
@@ -18,7 +18,7 @@ class SearchProcessor extends AbstractBaseClass
                 'query' => [
                     'query_string' => [
                         'default_field' => "subtitles",
-                        'query' => ""
+                        'query' => "",
                     ],
                 ],
                 'highlight' => [
@@ -33,12 +33,13 @@ class SearchProcessor extends AbstractBaseClass
                 ],
             ],
         ];
-        $searchKeywords = '*'.str_replace(' ',' AND ', $searchKeywords);
-        $searchKeywords .='*';
-        $params['body']['query']['query_string']['query']=$searchKeywords;
+        $searchKeywords = '*' . str_replace(' ', ' AND ', $searchKeywords);
+        $searchKeywords .= '*';
+        $params['body']['query']['query_string']['query'] = $searchKeywords;
 
         return $params;
     }
+
     public function generateSearchQuery($searchKeywords)
     {
         $params = [
@@ -49,24 +50,28 @@ class SearchProcessor extends AbstractBaseClass
                 'query' => [
                     'query_string' => [
                         'default_field' => "subtitles",
-                        'query' => ""
+                        'query' => "",
                     ],
+                ],
+                'sort' => [
+                    '_score' => ['order' => 'desc'],
                 ],
                 'highlight' => [
                     'pre_tags' => ['<b>'],
                     'post_tags' => ['</b>'],
+                    "order" => "score",
                     'fields' => [
                         "subtitles" => [
                             "fragment_size" => 300,
-                            "number_of_fragments" => 3,
+                            "number_of_fragments" => 100,
                         ],
                     ],
                 ],
             ],
         ];
-        $searchKeywords = '*'.str_replace(' ',' AND ', $searchKeywords);
-        $searchKeywords .='*';
-        $params['body']['query']['query_string']['query']=$searchKeywords;
+        $searchKeywords = '*' . str_replace(' ', ' AND ', $searchKeywords);
+        $searchKeywords .= '*';
+        $params['body']['query']['query_string']['query'] = $searchKeywords;
 
         return $params;
     }
