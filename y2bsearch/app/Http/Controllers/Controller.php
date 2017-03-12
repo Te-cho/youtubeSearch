@@ -17,6 +17,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
+    private $searchKeywords = "";
+
     /**
      * @param Request $request
      *
@@ -24,8 +26,9 @@ class Controller extends BaseController
      */
     public function show(Request $request)
     {
+        $this->searchKeywords = $request->get('search', '');
 //        (new GoogleAnalyticsService)->printResultss();
-        $search_keywords = strtolower($request->get('search', ''));
+        $search_keywords = strtolower($this->searchKeywords);
         if (empty($search_keywords)) {
             return $this->mainPage($search_keywords);
         } else {
@@ -57,6 +60,7 @@ class Controller extends BaseController
         $subtitlesService = new SubtitleAnalyzer();
         $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);
         $data['videos'] = $response['hits']['hits'];
+        $data['searchKeywords'] = $this->searchKeywords;
 
         return view('search-page', $data);
     }
