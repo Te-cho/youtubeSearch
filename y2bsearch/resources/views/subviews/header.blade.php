@@ -1,8 +1,8 @@
 <div id="header" class="ui borderless main menu fixed" style="position: fixed; top: 0px; left: auto; z-index: 10;">
     <div class="ui container">
-        <div href="/" class="header item">
+        <a href="/" class="header item logo-link">
             <img class="logo" src="{{asset('images/logo.png')}}">
-        </div>
+        </a>
         @if($showSearch)
             <form method="GET" action="/" class="header item">
                 <div class="ui action input">
