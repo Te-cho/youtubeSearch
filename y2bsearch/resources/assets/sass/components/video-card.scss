@@ -10,21 +10,27 @@
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 0px;
-  &:hover{
+  &:hover {
     top: -10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
     cursor: pointer;
   }
-  .icon{
-    &.facebook,&.twitter,&.google{
+  .icon {
+    &.facebook, &.twitter, &.google {
       color: $color-turquise;
     }
   }
-  .title{
+  .title {
     font-weight: 600;
   }
-  .share{
+  .share {
     color: $color-dark-blue;
+    font-size: 1.6em;
+    padding-left: 10px;
+    @media only screen and (min-width: 1200px) {
+      font-size: 1em;
+      padding-left: 0px;
+    }
   }
   .text {
     .spots {
@@ -33,4 +39,3 @@
   }
 
 }
-

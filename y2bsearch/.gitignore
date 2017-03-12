@@ -6,3 +6,4 @@ Homestead.json
 .env
 .idea
 /public/counter.txt
+npm-debug.log
