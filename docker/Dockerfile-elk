@@ -3,6 +3,9 @@ FROM sebp/elk
 WORKDIR ${LOGSTASH_HOME}
 RUN gosu logstash bin/logstash-plugin install logstash-input-jdbc
 COPY ./docker/config/logstash/logstash.conf config/logstash.conf
-RUN apt-get install wget unzip 
+RUN apt-get install wget unzip
 RUN wget http://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.1.40.zip -P data/
 RUN unzip data/mysql-connector-java-5.1.40.zip -d data/
+RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install x-pack --batch
+RUN /opt/kibana/bin/kibana-plugin install x-pack
+RUN /opt/logstash/bin/logstash-plugin install x-pack

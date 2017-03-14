@@ -30,7 +30,7 @@ class PageViewsCounter
         $counterVal = fread($f, filesize($counter_name));
         fclose($f);
 
-        $counterVal += (rand() % 25);
+        $counterVal++;
         $f = fopen($counter_name, "w");
         fwrite($f, $counterVal);
         fclose($f);

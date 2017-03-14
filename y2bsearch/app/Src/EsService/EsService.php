@@ -10,9 +10,8 @@ class EsService extends AbstractBaseClass
 {
     public static function generateESConnection()
     {
-        $hosts = [
-            'y2search_elk:9200',         // IP + Port
-        ];
+        $hosts = [env('ES_HOST')];
+
         return ClientBuilder::create()->setHosts($hosts)->build();
     }
 }
