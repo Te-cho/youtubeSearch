@@ -8,7 +8,7 @@ up:
 	docker-compose up -d
 upProduction: up
 	docker exec -it y2search bash -c "cd /y2search/; npm install; npm run prod;"
-	mv ./y2bsearch/.env.prod ./y2bsearch/.env
+	mv /youtubeSearch/y2bsearch/.env.prod /youtubeSearch/y2bsearch/.env
 down:
 	docker-compose down
 stop:
