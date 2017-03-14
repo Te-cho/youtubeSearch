@@ -8,4 +8,4 @@ deployment:
     branch: master
     commands:
       - rsync -avz /home/ubuntu/youtubeSearch/ root@139.59.238.155:/youtubeSearch
-      - ssh -i ~/.ssh/id_rsa root@139.59.238.155 'make -C /youtubeSearch/ upProduction; chmod -R 777 /youtubeSearch/y2bsearch/storage/; chmod -R 777 /youtubeSearch/y2bsearch/public/counter.txt'
+      - ssh -i ~/.ssh/id_rsa root@139.59.238.155 'make -C /youtubeSearch/ upProduction; chmod -R 777 /youtubeSearch/y2bsearch/storage/; chmod -R 777 /youtubeSearch/y2bsearch/public/counter.txt; mv /youtubeSearch/y2bsearch/.env.prod /youtubeSearch/y2bsearch/.env'
