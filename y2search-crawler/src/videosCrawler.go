@@ -38,7 +38,7 @@ func handleError(err error) {
 
 //////////////////
 //START OF YOUTUBE
-func listTrending(c chan ytvideo.YTVideo, tPoolNum chan int) {
+func listTrending(c chan ytvideo.YTVideo, tPoolNum chan int, videoCategoryId string) {
 	flag.Parse()
 
 	client := &http.Client{
@@ -53,11 +53,14 @@ func listTrending(c chan ytvideo.YTVideo, tPoolNum chan int) {
 	// Make the API call to YouTube.
 	call := service.Videos.List("id,snippet,contentDetails").
 		Chart("mostPopular").
+		VideoCategoryId(videoCategoryId).
 		MaxResults(*maxResults)
 
 	response, err := call.Do()
 	if err != nil {
-		log.Fatalf("Error making search API call: %v", err)
+		log.Printf("Error making search API call: %v for category %v", err, videoCategoryId)
+
+		return ;
 	}
 
 	// Iterate through each item and add it to the correct list.
@@ -224,7 +227,10 @@ func main() {
 	initializeMysqlConn()
 	var c chan ytvideo.YTVideo = make(chan ytvideo.YTVideo)
 	var tPoolNum chan int = make(chan int)
-	go listTrending(c, tPoolNum)
+	videoCategoryIds := os.Args[1:]
+	for _, catId := range videoCategoryIds {
+		go listTrending(c, tPoolNum, catId)
+	}
 	go threadsPoolManager(tPoolNum)
 
 	for i := 0; i < 5000; i++ {

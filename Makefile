@@ -25,6 +25,6 @@ indexMysql: copyConfig
 indexMysqlBG: copyConfig
 	docker exec -it -d y2search_elk bash -c "cd /opt/logstash; bin/logstash -f config/logstash.conf"
 crawlVideos:
-	docker exec -it y2search_crawler bash -c "go run app/videosCrawler.go"
+	docker exec -it y2search_crawler bash -c "go run app/videosCrawler.go {1..45}"
 crawlVideosBG:
-	docker exec -it -d y2search_crawler bash -c "go run app/videosCrawler.go"
+	docker exec -it -d y2search_crawler bash -c "go run app/videosCrawler.go {1..45}"
