@@ -1,0 +1,31 @@
+version: "2"
+services:
+
+  fpm:
+    image: php:7.1.1-fpm-alpine
+#    links:
+#      - mysql
+    volumes:
+      - ../y2bsearch:/y2bsearch/
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    links:
+      - fpm
+    volumes_from:
+      - fpm
+    volumes:
+      - ./nginx/config/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+
+  mysql:
+    build: mysql
+    ports:
+      - "3306:3306"
+
+  builder:
+    build: builder
+    volumes_from:
+      - fpm
+    command: "composer install -d /y2bsearch"
