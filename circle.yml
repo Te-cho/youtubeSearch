@@ -2,7 +2,7 @@ general:
   build_dir: y2bsearch
 dependencies:
   post:
-   - mv /home/ubuntu/youtubeSearch/y2bsearch/.env.dev /home/ubuntu/youtubeSearch/y2bsearch/.env
+   - mv /home/ubuntu/youtubeSearch/y2bsearch/.env.prod /home/ubuntu/youtubeSearch/y2bsearch/.env
 deployment:
   push_to_server:
     branch: master
