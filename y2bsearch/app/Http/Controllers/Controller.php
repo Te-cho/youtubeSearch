@@ -30,21 +30,21 @@ class Controller extends BaseController
 //        (new GoogleAnalyticsService)->printResultss();
         $search_keywords = strtolower($this->searchKeywords);
         if (empty($search_keywords)) {
-            return $this->mainPage($search_keywords);
+            return $this->mainPage();
         } else {
             return $this->searchPage($search_keywords);
         }
 
     }
 
-    public function mainPage($search_keywords)
+    public function mainPage()
     {
         $searchProcessor = new SearchProcessor();
         $client = EsService::generateESConnection();
         $params = $searchProcessor->generateTopSearchQuery();
         $response = $client->search($params);
         $subtitlesService = new SubtitleAnalyzer();
-        $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);
+        $response = $subtitlesService->analyzeAndProcess($response);
         $data['videos'] = $response['hits']['hits'];
         $data['mainPage'] = true;
 
@@ -58,7 +58,7 @@ class Controller extends BaseController
         $params = $searchProcessor->generateSearchQuery($search_keywords);
         $response = $client->search($params);
         $subtitlesService = new SubtitleAnalyzer();
-        $response = $subtitlesService->analyzeAndProcess($response, $search_keywords);
+        $response = $subtitlesService->analyzeAndProcess($response);
         $data['videos'] = $response['hits']['hits'];
         $data['searchKeywords'] = $this->searchKeywords;
 

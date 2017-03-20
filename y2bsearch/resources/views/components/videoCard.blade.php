@@ -4,7 +4,7 @@
             <div class="content title">
                 {{ $video['video_title'] }}
             </div>
-            <a target="_blank" data-embedhref="https://www.youtube.com/embed/{{ $video['video_hash_id'] }}?start={{ $video['start'] }}&cc_load_policy=1&autoplay=1"
+            <a target="_blank" data-embedhref="https://www.youtube.com/embed/{{ $video['video_hash_id'] }}?start={{ strtotime($start ) - strtotime('TODAY')}}&cc_load_policy=1&autoplay=1"
                data-id="{{ $video['video_hash_id'] }}" class="image .valencia .lark">
                 <img src="{{$video['image_medium']}}">
             </a>

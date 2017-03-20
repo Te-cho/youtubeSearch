@@ -48,30 +48,45 @@ class SearchProcessor extends AbstractBaseClass
             'body' => [
                 'size' => 9,
                 'query' => [
-                    'query_string' => [
-                        'default_field' => "subtitles",
-                        'query' => "",
+                    'bool' => [
+                        'must' => [
+                            "nested" => [
+                                'path' => "subtitles",
+                                'inner_hits' => [
+                                    'highlight' => [
+                                        'pre_tags' => ['<b>'],
+                                        'post_tags' => ['</b>'],
+                                        "order" => "score",
+                                        'fields' => [
+                                            "subtitles.sentence" => [
+                                                "fragment_size" => 300,
+                                                "number_of_fragments" => 100,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'query' => [
+                                    'bool' => [
+                                        'must' => [],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 'sort' => [
                     '_score' => ['order' => 'desc'],
                 ],
-                'highlight' => [
-                    'pre_tags' => ['<b>'],
-                    'post_tags' => ['</b>'],
-                    "order" => "score",
-                    'fields' => [
-                        "subtitles" => [
-                            "fragment_size" => 300,
-                            "number_of_fragments" => 100,
-                        ],
-                    ],
-                ],
             ],
         ];
-        $searchKeywords = '*' . str_replace(' ', ' AND ', $searchKeywords);
-        $searchKeywords .= '*';
-        $params['body']['query']['query_string']['query'] = $searchKeywords;
+        $searchKeywords = explode(' ', $searchKeywords);
+        foreach ($searchKeywords as $keyword) {
+            $params['body']['query']['bool']['must']['nested']['query']['bool']['must'][] = [
+                'term' => [
+                    'subtitles.sentence' => $keyword,
+                ],
+            ];
+        }
 
         return $params;
     }
