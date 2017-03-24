@@ -9,7 +9,6 @@ class SubtitleAnalyzerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @test
      * @dataProvider ProvideSubtitles
      *
      * @param $searchTerm
