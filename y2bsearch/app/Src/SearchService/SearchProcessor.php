@@ -9,33 +9,19 @@ class SearchProcessor extends AbstractBaseClass
 
     public function generateTopSearchQuery()
     {
-        $searchKeywords = "search";
         $params = [
             'index' => 'videos_en',
             'type' => 'videosSubtitles',
             'body' => [
                 'size' => 3,
                 'query' => [
-                    'query_string' => [
-                        'default_field' => "subtitles",
-                        'query' => "",
-                    ],
+                    "exists" => ["field" => "created_at"],
                 ],
-                'highlight' => [
-                    'pre_tags' => ['<b>'],
-                    'post_tags' => ['</b>'],
-                    'fields' => [
-                        "subtitles" => [
-                            "fragment_size" => 300,
-                            "number_of_fragments" => 3,
-                        ],
-                    ],
+                'sort' => [
+                    'created_at' => ['order' => 'desc'],
                 ],
             ],
         ];
-        $searchKeywords = '*' . str_replace(' ', ' AND ', $searchKeywords);
-        $searchKeywords .= '*';
-        $params['body']['query']['query_string']['query'] = $searchKeywords;
 
         return $params;
     }

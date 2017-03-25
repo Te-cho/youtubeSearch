@@ -44,6 +44,7 @@ class Controller extends BaseController
         $params = $searchProcessor->generateTopSearchQuery();
         $response = $client->search($params);
         $subtitlesService = new SubtitleAnalyzer();
+        $response = $subtitlesService->makeSearchResult($response);
         $response = $subtitlesService->analyzeAndProcess($response);
         $data['videos'] = $response['hits']['hits'];
         $data['mainPage'] = true;

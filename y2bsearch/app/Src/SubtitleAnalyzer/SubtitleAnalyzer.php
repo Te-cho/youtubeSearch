@@ -36,4 +36,39 @@ class SubtitleAnalyzer
 
         return $videos;
     }
+
+    //to make main page search tophits, like the normal search result
+    public function makeSearchResult($response)
+    {
+        foreach ($response['hits']['hits'] as $key => $video) {
+            $innerHits = [
+                "subtitles" => [
+                    "hits" => [
+                        "total" => 1,
+                        "max_score" => 12.094503,
+                        "hits" => [
+                            0 => [
+                                "_nested" => [],
+                                "_score" => 12.094503,
+                                "_source" => [
+                                    "sentence" => $video['_source']['subtitles'][0]['sentence'],
+                                    "start" => $video['_source']['subtitles'][0]['start'],
+                                    "index" => 0,
+                                    "end" => $video['_source']['subtitles'][0]['end'],
+                                ],
+                                "highlight" => [
+                                    "subtitles.sentence" => [
+                                        $video['_source']['subtitles'][0]['sentence'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+            $response['hits']['hits'][$key]['inner_hits'] = $innerHits;
+        }
+
+        return $response;
+    }
 }
