@@ -24,6 +24,8 @@
     border-radius: 0px;
     input {
       border-radius: 0px;
+      -webkit-appearance: none;
+      -webkit-border-radius: 0px;
     }
     & > .icon {
       color: $color-dark-blue;
