@@ -9,7 +9,7 @@
                 @include('components.infographics')
                 @include('subviews.searchBar')
                 <h4 class="ui horizontal header divider">
-                    <a href="#">Hot Search</a>
+                    <a href="#">Latest Videos</a>
                 </h4>
             </div>
 
