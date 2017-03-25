@@ -3,13 +3,15 @@ services:
 
   fpm:
     image: php:7.1.1-fpm-alpine
-#    links:
-#      - mysql
+    container_name: y2bsearch_fpm
+    links:
+      - mysql
     volumes:
       - ../y2bsearch:/y2bsearch/
 
   nginx:
     image: nginx:alpine
+    container_name: y2bsearch_nginx
     ports:
       - "80:80"
     links:
@@ -21,11 +23,24 @@ services:
 
   mysql:
     build: mysql
+    container_name: y2bsearch_mysql
     ports:
       - "3306:3306"
 
-  builder:
-    build: builder
-    volumes_from:
-      - fpm
-    command: "composer install -d /y2bsearch"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    container_name: y2bsearch_elasticsearch
+    environment:
+      - ELASTIC_VER="5.1.1"
+    volumes:
+      - ./elasticsearch/data:/usr/share/java/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+#  builder:
+#    build: builder
+#    container_name: y2bsearch_builder
+#    volumes_from:
+#      - fpm
+#    command: "composer install -d /y2bsearch"
