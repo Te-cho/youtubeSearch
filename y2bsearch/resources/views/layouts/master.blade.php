@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-2113342998549991",
+            enable_page_level_ads: true
+        });
+    </script>
     @include('scripts.metadata')
     {{--<link defer href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">--}}
     <link defer rel="stylesheet" href="{{asset('css/app.css')}}"/>
