@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"flag"
+	"time"
 	"net/http"
 	"google.golang.org/api/googleapi/transport"
 	"google.golang.org/api/youtube/v3"
@@ -20,7 +21,7 @@ var (
 	listingVideos = flag.String("chart", "mostPopular", "")
 	maxResults = flag.Int64("max-results", 50, "Max YouTube results")
 	db sql.DB
-	debugOutput = false
+	debugOutput = true
 	number = 0
 )
 // var db sql.DB
@@ -30,7 +31,7 @@ const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
 //START OF Miscilanious 
 func handleError(err error) {
 	if err != nil {
-		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
+		log.Println(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
 }
 //END OF Miscilanious 
@@ -148,13 +149,13 @@ func initializeMysqlConn() {
 	dbConn, err := sql.Open("mysql", "admin:admin@tcp(y2search_mysql:3306)/y2search_db?collation=utf8mb4_unicode_ci")
 	db = *dbConn
 	if err != nil {
-		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
+		log.Panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
 
 	// Open doesn't open a connection. Validate DSN data:
 	err = db.Ping()
 	if err != nil {
-		panic(err.Error()) // proper error handling instead of panic in your app
+		log.Panic(err.Error()) // proper error handling instead of panic in your app
 	}
 }
 
@@ -223,6 +224,16 @@ func consumeThread(tPoolNum chan int) {
 // MAIN APPLICATION START POINT
 
 func main() {
+	LogfileName := "/tmp/logs/"+"log_" + time.Now().Format("2006-01-02_15:04:05") + ".log"
+	f, err := os.OpenFile(LogfileName, os.O_APPEND | os.O_CREATE | os.O_RDWR, 0666)
+	if err != nil {
+		fmt.Printf("error opening file: %v", err)
+	}
+	// don't forget to close it
+	defer f.Close()
+	// assign it to the standard logger
+	log.SetOutput(f)
+
 	//mysql connection
 	initializeMysqlConn()
 	var c chan ytvideo.YTVideo = make(chan ytvideo.YTVideo)
