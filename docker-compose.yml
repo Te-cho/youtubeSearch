@@ -47,6 +47,7 @@ services:
       - y2search_mysql
     volumes: 
       - ./y2search-crawler/src:/go/src/app
+      - /tmp/logs/crawler:/tmp/logs
     hostname: y2search_crawler
     command: bash -c "tail -f /dev/null"
 
