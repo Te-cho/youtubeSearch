@@ -1,0 +1,7 @@
+steps:
+- name: 'asia.gcr.io/cloud-builders/y2search'
+  args: ['build', '-t', 'asia.gcr.io/youtubesearch-151013/y2search/$commitSha', '.']
+- name: 'asia.gcr.io/cloud-builders/crawler'
+  args: ['build', '-t', 'asia.gcr.io/youtubesearch-151013/crawler/$commitSha', '.']
+  dir: ''
+images: ['asia.gcr.io/youtubesearch-151013/y2search/$commitSha', 'asia.gcr.io/youtubesearch-151013/crawler/$commitSha']
