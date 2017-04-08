@@ -73,51 +73,7 @@ func listVideosWithNoSubtitles(c chan ytvideo.YTVideo, tPoolNum chan int) {
 		log.Fatal(err)
 	}
 }
-//Bring suggestions for the videos Id passed
-func getVideoSuggestions(videoId string, videoChan chan ytvideo.YTVideo, pageToken string, tPoolNum chan int) {
-	//([]*youtube.Video){
-	flag.Parse()
 
-	client := &http.Client{
-		Transport: &transport.APIKey{Key: developerKey},
-	}
-
-	service, err := youtube.New(client)
-	if err != nil {
-		log.Fatalf("Error creating new YouTube client: %v", err)
-	}
-
-	// Make the API call to YouTube.
-	call := service.Search.List("id,snippet").
-		MaxResults(*maxResults).
-		Type("video").
-		RelatedToVideoId(videoId).
-		PageToken(pageToken)
-
-	response, err := call.Do()
-	if err != nil {
-		log.Fatalf("Error making search API call: %v", err)
-	}
-
-	// Group video, channel, and playlist results in separate lists.
-	//can use type youtube.Video later
-	videos := make(map[string]ytvideo.YTVideo)
-
-
-	// // Iterate through each item and add it to the correct list.
-	for _, item := range response.Items {
-		videoObj := ytvideo.YTVideo{}.ConvertSearchResult(item)
-		videos[item.Id.VideoId] = videoObj
-		go videosHandler(videoChan, tPoolNum)
-		videoChan <- videoObj
-	}
-
-
-	//fetch the rest of th videos if we still have
-	if len(response.NextPageToken) > 0 {
-		getVideoSuggestions(videoId, videoChan, response.NextPageToken, tPoolNum)
-	}
-}
 //END OF YOUTUBE
 //////////////////
 
@@ -136,7 +92,6 @@ func videosHandler(videoChan chan ytvideo.YTVideo, tPoolNum chan int) {
 		log.Printf("%v", err)
 	}
 	StoreValue(video)
-	getVideoSuggestions(video.Id, videoChan, "12", tPoolNum)// 12 is a random token that works as initial value
 }
 
 // START OF MYSQL
@@ -172,7 +127,8 @@ func StoreValue(ytVideoObj ytvideo.YTVideo) {
 
 	// Read subtitles file
 	file, err := ioutil.ReadFile("srts/" + ytVideoObj.Id + ".en.vtt")// it will be save with this extension regardless
-	os.Remove("srts/" + ytVideoObj.Id + ".en.vtt");
+	//fmt.Printf(file)
+	defer os.Remove("srts/" + ytVideoObj.Id + ".en.vtt");
 	if debugOutput {
 		log.Println(err)
 	}
