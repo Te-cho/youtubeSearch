@@ -67,6 +67,7 @@ func listVideosWithNoSubtitles(c chan ytvideo.YTVideo, tPoolNum chan int) {
 
 		//c <- videoObj
 		log.Println("processing video %v \n", videoId)
+		go videosHandler(c, tPoolNum)
 
 	}
 	if err := rows.Err(); err != nil {
