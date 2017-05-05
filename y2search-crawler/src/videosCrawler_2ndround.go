@@ -14,7 +14,8 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import "io/ioutil"
 import "os"
-import "github.com/youtube-videos/go-youtube-dl"
+import "os/exec"
+//import "github.com/youtube-videos/go-youtube-dl"
 import "app/ytvideo"
 
 var (
@@ -27,6 +28,34 @@ var (
 )
 // var db sql.DB
 const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
+
+
+/*
+	Downloader
+ */
+// Youtube-dl SRT Downloader
+type YoutubeDl struct {
+	Path string
+}
+
+func (youtubedl YoutubeDl) DownloadVideo(id string) error{
+	filename := "\"" + youtubedl.Path + "/" + id + ".srt\""
+	commandParams := " --write-auto-sub --skip-download --sub-lang en -o " + filename + " -- " + id
+	commandName := "youtube-dl"
+	command := commandName + " " + commandParams
+	cmd := exec.Command("bash", "-c", command)
+	//err := cmd.Run() // waits until the commands runs and finishes
+	err := cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("command : %v", command)
+	log.Printf("Waiting for command to finish...")
+	err = cmd.Wait()
+	log.Printf("Command finished with error: %v", err)
+	return err
+}
+//
 
 //////////////////
 //START OF Miscilanious 
@@ -130,8 +159,8 @@ func videosHandler(videoChan chan ytvideo.YTVideo, tPoolNum chan int) {
 	if debugOutput {
 		log.Println("Handling video %v", video.Id)
 	}
-	ytdl := youtube_dl.YoutubeDl{}
-	ytdl.Path = "$GOPATH/src/app/srts"
+	ytdl := YoutubeDl{}
+	ytdl.Path = "/go/src/app/srts"
 	err := ytdl.DownloadVideo(video.Id)
 	if err != nil {
 		log.Printf("%v", err)
@@ -172,8 +201,8 @@ func StoreValue(ytVideoObj ytvideo.YTVideo) {
 	log.Println("lastInsertedId : %v", lastInsertedId)
 
 	// Read subtitles file
-	file, err := ioutil.ReadFile("srts/" + ytVideoObj.Id + ".en.vtt")// it will be save with this extension regardless
-	os.Remove("srts/" + ytVideoObj.Id + ".en.vtt");
+	file, err := ioutil.ReadFile("/go/src/app/srts/" + ytVideoObj.Id + ".en.vtt")// it will be save with this extension regardless
+	//defer os.Remove("/go/src/app/srts/" + ytVideoObj.Id + ".en.vtt");
 	if debugOutput {
 		log.Println(err)
 	}
@@ -195,6 +224,8 @@ func StoreValue(ytVideoObj ytvideo.YTVideo) {
 		// Inserting
 		_, err = stmtVidMetaIns.Exec(lastInsertedId, ytVideoObj.ThumbnailDefault, ytVideoObj.ThumbnailMedium, ytVideoObj.ThumbnailHigh) // Insert tuples
 		handleError(err)
+	} else {
+		log.Println(err)
 	}
 }
 
@@ -203,7 +234,7 @@ func StoreValue(ytVideoObj ytvideo.YTVideo) {
 
 func threadsPoolManager(tPoolNum chan int) {
 	// So that we run only 10 at a time
-	for counter := 0; counter < 100; counter++ {
+	for counter := 0; counter < 10; counter++ {
 		tPoolNum <- counter
 	}
 }
@@ -218,7 +249,7 @@ func consumeThread(tPoolNum chan int) {
 // MAIN APPLICATION START POINT
 
 func main() {
-	LogfileName := "/tmp/logs/"+"log_2ndrnd_" + time.Now().Format("2006-01-02_15:04:05") + ".log"
+	LogfileName := "/tmp/logs/"+"log_2ndrnd_" + time.Now().Format("20060102_1504") + ".log"
 	f, err := os.OpenFile(LogfileName, os.O_APPEND | os.O_CREATE | os.O_RDWR, 0666)
 	if err != nil {
 		fmt.Printf("error opening file: %v", err)
@@ -237,7 +268,7 @@ func main() {
 
 	go threadsPoolManager(tPoolNum)
 
-	for i := 0; i < 50; i++ {
+	for i := 0; i < 1; i++ {
 		go videosHandler(c, tPoolNum)
 	}
 
