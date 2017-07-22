@@ -3,12 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"flag"
 	"strconv"
 	"time"
-	"net/http"
-	"google.golang.org/api/googleapi/transport"
-	"google.golang.org/api/youtube/v3"
 )
 import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
@@ -19,12 +15,9 @@ import "os/exec"
 import "app/ytvideo"
 
 var (
-	query = flag.String("query", "iprice Mannequinchallenge", "")
-	listingVideos = flag.String("chart", "mostPopular", "")
-	maxResults = flag.Int64("max-results", 50, "Max YouTube results")
 	db sql.DB
 	debugOutput = true
-	number = 0
+	logToFile = false
 )
 // var db sql.DB
 const developerKey = "AIzaSyCq6GaikitWw3X3xMduprZB_soUZqvg9_c"
@@ -38,7 +31,7 @@ type YoutubeDl struct {
 	Path string
 }
 
-func (youtubedl YoutubeDl) DownloadVideo(id string) error{
+func (youtubedl YoutubeDl) DownloadVideo(id string) error {
 	filename := "\"" + youtubedl.Path + "/" + id + ".srt\""
 	commandParams := " --write-auto-sub --skip-download --sub-lang en -o " + filename + " -- " + id
 	commandName := "youtube-dl"
@@ -71,7 +64,7 @@ func handleError(err error) {
 //START OF YOUTUBE
 func listVideosWithNoSubtitles(c chan ytvideo.YTVideo, tPoolNum chan int) {
 
-	rows, err := db.Query("SELECT video_hash_id, id FROM videos v where id not in (SELECT v.id FROM videos v, videos_subtitles vs where v.id = vs.video_id)")
+	rows, err := db.Query("SELECT video_hash_id, id FROM videos v where id not in (SELECT v.id FROM videos v, videos_subtitles vs where v.id = vs.video_id) limit 1000")
 	handleError(err)
 	defer rows.Close() // Close the statement when we leave main() / the program terminates
 	// Inserting
@@ -85,12 +78,12 @@ func listVideosWithNoSubtitles(c chan ytvideo.YTVideo, tPoolNum chan int) {
 		}
 		vid := ytvideo.YTVideo{}
 		vid.Id = videoHashId
-		vid.Url  = "https://www.youtube.com/watch?v=" + vid.Id
-		vid.Title  = videoId
+		vid.Url = "https://www.youtube.com/watch?v=" + vid.Id
+		vid.Title = videoId
 		vid.Description = ""
-		vid.ThumbnailDefault = "https://i.ytimg.com/vi/"+vid.Id+"/mqdefault.jpg"
-		vid.ThumbnailMedium = "https://i.ytimg.com/vi/"+vid.Id+"/default.jpg"
-		vid.ThumbnailHigh = "https://i.ytimg.com/vi/"+vid.Id+"/hqdefault.jpg"
+		vid.ThumbnailDefault = "https://i.ytimg.com/vi/" + vid.Id + "/mqdefault.jpg"
+		vid.ThumbnailMedium = "https://i.ytimg.com/vi/" + vid.Id + "/default.jpg"
+		vid.ThumbnailHigh = "https://i.ytimg.com/vi/" + vid.Id + "/hqdefault.jpg"
 		vid.PublishedAt = ""
 		c <- vid
 
@@ -101,51 +94,6 @@ func listVideosWithNoSubtitles(c chan ytvideo.YTVideo, tPoolNum chan int) {
 	}
 	if err := rows.Err(); err != nil {
 		log.Fatal(err)
-	}
-}
-//Bring suggestions for the videos Id passed
-func getVideoSuggestions(videoId string, videoChan chan ytvideo.YTVideo, pageToken string, tPoolNum chan int) {
-	//([]*youtube.Video){
-	flag.Parse()
-
-	client := &http.Client{
-		Transport: &transport.APIKey{Key: developerKey},
-	}
-
-	service, err := youtube.New(client)
-	if err != nil {
-		log.Fatalf("Error creating new YouTube client: %v", err)
-	}
-
-	// Make the API call to YouTube.
-	call := service.Search.List("id,snippet").
-		MaxResults(*maxResults).
-		Type("video").
-		RelatedToVideoId(videoId).
-		PageToken(pageToken)
-
-	response, err := call.Do()
-	if err != nil {
-		log.Fatalf("Error making search API call: %v", err)
-	}
-
-	// Group video, channel, and playlist results in separate lists.
-	//can use type youtube.Video later
-	videos := make(map[string]ytvideo.YTVideo)
-
-
-	// // Iterate through each item and add it to the correct list.
-	for _, item := range response.Items {
-		videoObj := ytvideo.YTVideo{}.ConvertSearchResult(item)
-		videos[item.Id.VideoId] = videoObj
-		go videosHandler(videoChan, tPoolNum)
-		videoChan <- videoObj
-	}
-
-
-	//fetch the rest of th videos if we still have
-	if len(response.NextPageToken) > 0 {
-		getVideoSuggestions(videoId, videoChan, response.NextPageToken, tPoolNum)
 	}
 }
 //END OF YOUTUBE
@@ -166,7 +114,6 @@ func videosHandler(videoChan chan ytvideo.YTVideo, tPoolNum chan int) {
 		log.Printf("%v", err)
 	}
 	StoreValue(video)
-	getVideoSuggestions(video.Id, videoChan, "12", tPoolNum)// 12 is a random token that works as initial value
 }
 
 // START OF MYSQL
@@ -203,9 +150,7 @@ func StoreValue(ytVideoObj ytvideo.YTVideo) {
 	// Read subtitles file
 	file, err := ioutil.ReadFile("/go/src/app/srts/" + ytVideoObj.Id + ".en.vtt")// it will be save with this extension regardless
 	//defer os.Remove("/go/src/app/srts/" + ytVideoObj.Id + ".en.vtt");
-	if debugOutput {
-		log.Println(err)
-	}
+
 	if err == nil {
 		// INSERTING VIDEO's Subtitles
 		// Prepairing
@@ -234,7 +179,7 @@ func StoreValue(ytVideoObj ytvideo.YTVideo) {
 
 func threadsPoolManager(tPoolNum chan int) {
 	// So that we run only 10 at a time
-	for counter := 0; counter < 10; counter++ {
+	for counter := 0; counter < 1; counter++ {
 		tPoolNum <- counter
 	}
 }
@@ -249,16 +194,17 @@ func consumeThread(tPoolNum chan int) {
 // MAIN APPLICATION START POINT
 
 func main() {
-	LogfileName := "/tmp/logs/"+"log_2ndrnd_" + time.Now().Format("20060102_1504") + ".log"
-	f, err := os.OpenFile(LogfileName, os.O_APPEND | os.O_CREATE | os.O_RDWR, 0666)
-	if err != nil {
-		fmt.Printf("error opening file: %v", err)
+	if logToFile {
+		LogfileName := "/tmp/logs/" + "log_2ndrnd_" + time.Now().Format("20060102_1504") + ".log"
+		f, err := os.OpenFile(LogfileName, os.O_APPEND | os.O_CREATE | os.O_RDWR, 0666)
+		if err != nil {
+			fmt.Printf("error opening file: %v", err)
+		}
+		// don't forget to close it
+		defer f.Close()
+		// assign it to the standard logger
+		log.SetOutput(f)
 	}
-	// don't forget to close it
-	defer f.Close()
-	// assign it to the standard logger
-	log.SetOutput(f)
-
 	//mysql connection
 	initializeMysqlConn()
 	var c chan ytvideo.YTVideo = make(chan ytvideo.YTVideo)
