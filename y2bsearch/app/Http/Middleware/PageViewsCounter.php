@@ -27,8 +27,12 @@ class PageViewsCounter
         }
         // Read the current value of our counter file
         $f = fopen($counter_name, "r");
+        if(filesize($counter_name)){
         $counterVal = fread($f, filesize($counter_name));
         fclose($f);
+        } else {
+            $counterVal = 0;
+        }
 
         $counterVal++;
         $f = fopen($counter_name, "w");
